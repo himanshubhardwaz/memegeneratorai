@@ -8,9 +8,10 @@ import {
   unstable_createFileUploadHandler,
   unstable_createMemoryUploadHandler,
   unstable_parseMultipartFormData,
-} from "@remix-run/node"; // or cloudflare/deno
-import { json } from "@remix-run/node"; // or cloudflare/deno
+} from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
+import { useNavigation } from "@remix-run/react";
 import getCaptionedImage from "../../utils/get-captioned-image.server";
 
 type actionData = TypedResponse<{
@@ -45,6 +46,7 @@ export async function action({ request }: ActionArgs): Promise<actionData> {
 
 export default function CreateMemePage() {
   const data = useActionData<typeof action>();
+  const navigation = useNavigation();
 
   if (data?.captionedImageUrl) {
     return (
@@ -95,7 +97,7 @@ export default function CreateMemePage() {
         </div>
         <div className='form-control mt-6'>
           <button className='btn btn-primary w-full max-w-xs' type='submit'>
-            Create Meme
+            {navigation.state === "submitting" ? "Loading..." : "Create Meme"}
           </button>
         </div>
       </Form>
