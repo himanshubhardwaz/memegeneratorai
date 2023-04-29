@@ -1,5 +1,5 @@
 import { prismaClient } from "./prisma-client.server";
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 
 export async function findUserByEmail(email: string) {
   return await prismaClient.user.findUnique({ where: { email } });
@@ -19,4 +19,11 @@ export async function findUserById(id: string) {
       id,
     },
   });
+}
+
+export async function checkPasswordValidity(
+  passwordEntered: string,
+  userPasswords: string
+) {
+  return await bcrypt.compare(passwordEntered, userPasswords);
 }
