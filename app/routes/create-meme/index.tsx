@@ -96,7 +96,11 @@ export default function CreateMemePage() {
           />
         </div>
         <div className='form-control mt-6'>
-          <button className='btn btn-primary w-full max-w-xs' type='submit'>
+          <button
+            className='btn btn-primary w-full max-w-xs'
+            type='submit'
+            disabled={navigation.state === "submitting"}
+          >
             {navigation.state === "submitting" ? "Loading..." : "Create Meme"}
           </button>
         </div>
