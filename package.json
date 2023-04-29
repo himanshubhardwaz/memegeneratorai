@@ -13,6 +13,7 @@
     "@remix-run/vercel": "^1.15.0",
     "@sendgrid/mail": "^7.7.0",
     "@vercel/node": "^2.10.3",
+    "bcrypt": "^5.1.0",
     "cloudinary": "^1.36.2",
     "daisyui": "^2.51.6",
     "isbot": "^3.6.8",

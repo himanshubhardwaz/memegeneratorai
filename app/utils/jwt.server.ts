@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 export function generateAccessToken(user: { id: string }) {
   return jwt.sign({ userId: user.id }, String(process.env.JWT_ACCESS_SECRET), {
-    expiresIn: "5m",
+    expiresIn: "15m",
   });
 }
 
@@ -14,7 +14,7 @@ export function generateRefreshToken(user: { id: string }, jti: string) {
     },
     String(process.env.JWT_REFRESH_SECRET),
     {
-      expiresIn: "8h",
+      expiresIn: "7d",
     }
   );
 }
