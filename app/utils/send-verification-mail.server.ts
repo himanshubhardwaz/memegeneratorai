@@ -2,7 +2,7 @@ import sgMail from "@sendgrid/mail";
 
 sgMail.setApiKey(String(process.env.SENDGRID_API_KEY));
 
-export default async function sendEmailVerificationMail({
+export async function sendEmailVerificationMail({
   to,
   verificationUrl,
 }: {

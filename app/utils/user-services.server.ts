@@ -27,3 +27,10 @@ export async function checkPasswordValidity(
 ) {
   return await bcrypt.compare(passwordEntered, userPasswords);
 }
+
+export async function verifyUserEmail(id: string) {
+  return await prismaClient.user.update({
+    where: { id },
+    data: { isEmailVerified: true },
+  });
+}

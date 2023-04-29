@@ -8,6 +8,7 @@ import {
   createUserByEmailAndPassword,
   findUserByEmail,
 } from "~/utils/user-services.server";
+import { sendEmailVerificationMail } from "~/utils/send-verification-mail.server";
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
@@ -32,9 +33,16 @@ export async function action({ request }: ActionArgs) {
 
   try {
     const user = await createUserByEmailAndPassword({ email, password });
+
     const jti = uuidv4();
     const { accessToken, refreshToken } = generateTokens(user, jti);
     await addRefreshTokenToWhitelist({ jti, refreshToken, userId: user.id });
+
+    sendEmailVerificationMail({
+      to: user.email,
+      verificationUrl: `${process.env.BASE_URL}/verify-email/${user.id}`,
+    });
+
     return json({
       accessToken,
       refreshToken,
