@@ -33,12 +33,13 @@ model RefreshToken {
 }
 
 model Meme {
-  id        String   @id @unique @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String
-  url       String
-  caption   String
-  isPublic  Boolean  @default(false)
+  id         String   @id @unique @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  User       User?    @relation(fields: [userId], references: [id])
+  userId     String
+  url        String
+  caption    String
+  isPublic   Boolean  @default(false)
+  likesCount Int      @default(0)
 }

@@ -23,7 +23,7 @@ export default function Index() {
             excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
             a id nisi.
           </p>
-          <Link to='/create-meme' className='btn btn-primary'>
+          <Link to='/meme/create' className='btn btn-primary'>
             Get Started
           </Link>
         </div>
