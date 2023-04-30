@@ -1,11 +1,22 @@
 import type { LoaderArgs } from "@remix-run/node";
-import { requireUserSession } from "~/sessions";
+import { json } from "@remix-run/node";
+import { getMemeById } from "~/utils/meme-services.server";
+import { useLoaderData } from "@remix-run/react";
 
-export async function loader({ request }: LoaderArgs) {
-  await requireUserSession(request);
-  return null;
+export async function loader({ request, params }: LoaderArgs) {
+  const id = params.id;
+  if (!id) return null;
+
+  const response = await getMemeById(id, request);
+
+  if (response instanceof Error) {
+    return json({ error: response.message });
+  }
+
+  return json(response);
 }
 
 export default function MemeByIdPage() {
-  return <>Meme by id</>;
+  const data = useLoaderData<typeof loader>();
+  return <>Meme by id: {JSON.stringify(data)}</>;
 }

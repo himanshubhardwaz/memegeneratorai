@@ -1,8 +1,9 @@
 import { Configuration, OpenAIApi } from "openai";
 import { v2 as cloudinary } from "cloudinary";
-import { requireUserSession } from "~/sessions";
+import { requireUserSession, getSession } from "~/sessions";
 import { prismaClient } from "~/utils/prisma-client.server";
 import type { RequestArg } from "~/sessions";
+import type { Meme } from "@prisma/client";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -96,4 +97,43 @@ export async function getImageAndUrl(
     console.log("Error --->>> ", error);
   }
   return new Error("Something Went wrong");
+}
+
+export async function getMemeById(
+  id: string,
+  request: RequestArg
+): Promise<Meme | Error> {
+  const meme = await prismaClient.meme.findUnique({ where: { id } });
+  if (!meme) throw new Error("Could not find meme");
+
+  const { isPublic, userId } = meme;
+
+  const session = await getSession(request.headers.get("Cookie"));
+
+  if (!isPublic) {
+    if (session.get("userId") === userId) {
+      return meme;
+    }
+    throw new Error("This meme is not public");
+  }
+
+  return meme;
+}
+
+export async function getUsersMemeCollection(userId: string) {
+  const usersMemeCollection = await prismaClient.meme.findMany({
+    where: { userId: userId },
+  });
+
+  return usersMemeCollection;
+}
+
+export async function getPopularMemes() {
+  const popularMemes = await prismaClient.meme.findMany({
+    take: 10,
+    where: { isPublic: true },
+    orderBy: { likesCount: "desc" },
+  });
+
+  return popularMemes;
 }
