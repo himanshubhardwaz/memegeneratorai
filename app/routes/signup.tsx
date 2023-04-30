@@ -47,7 +47,7 @@ export async function action({ request }: ActionArgs) {
   if (existingUser) {
     session.flash("error", "User already exists");
     // Redirect back to the login page with errors.
-    return redirect("/register", {
+    return redirect("/signup", {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
