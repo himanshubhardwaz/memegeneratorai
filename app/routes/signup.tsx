@@ -40,7 +40,7 @@ export async function action({ request }: ActionArgs) {
 
     sendEmailVerificationMail({
       to: user.email,
-      verificationUrl: `${process.env.BASE_URL}/verify-email/${user.id}`,
+      verificationUrl: `${process.env.BASE_URL}/verify-email?id=${user.id}`,
     });
 
     return json({
