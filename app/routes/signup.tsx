@@ -1,16 +1,33 @@
-import type { ActionArgs } from "@remix-run/node";
-import { v4 as uuidv4 } from "uuid";
-import { json } from "@remix-run/node";
-import { Form, useActionData, useNavigation } from "@remix-run/react";
-import { addRefreshTokenToWhitelist } from "~/utils/auth-services.server";
-import { generateTokens } from "~/utils/jwt.server";
+import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { Form, useLoaderData, useNavigation } from "@remix-run/react";
 import {
   createUserByEmailAndPassword,
   findUserByEmail,
 } from "~/utils/user-services.server";
 import { sendEmailVerificationMail } from "~/utils/send-verification-mail.server";
+import { getSession, commitSession } from "~/sessions";
+
+export async function loader({ request }: LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  if (session.has("userId")) {
+    // Redirect to the home page if they are already signed in.
+    return redirect("/");
+  }
+
+  const data = { error: session.get("error") };
+
+  return json(data, {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
+}
 
 export async function action({ request }: ActionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+
   const formData = await request.formData();
 
   const email = formData.get("email");
@@ -28,42 +45,38 @@ export async function action({ request }: ActionArgs) {
   const existingUser = await findUserByEmail(email);
 
   if (existingUser) {
-    return json({ error: "User already exists" });
+    session.flash("error", "User already exists");
+    // Redirect back to the login page with errors.
+    return redirect("/register", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   }
 
-  try {
-    const user = await createUserByEmailAndPassword({ email, password });
+  const user = await createUserByEmailAndPassword({ email, password });
 
-    const jti = uuidv4();
-    const { accessToken, refreshToken } = generateTokens(user, jti);
-    await addRefreshTokenToWhitelist({ jti, refreshToken, userId: user.id });
+  sendEmailVerificationMail({
+    to: user.email,
+    verificationUrl: `${process.env.BASE_URL}/verify-email?id=${user.id}`,
+  });
 
-    sendEmailVerificationMail({
-      to: user.email,
-      verificationUrl: `${process.env.BASE_URL}/verify-email?id=${user.id}`,
-    });
+  session.set("userId", user.id);
 
-    return json({
-      accessToken,
-      refreshToken,
-    });
-  } catch (err) {
-    return json({ error: "Opps! Something went wrong!" });
-  }
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 }
 
 export default function SignupPage() {
-  const data = useActionData<typeof action>();
-
+  const { error } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-center p-24 gap-8'>
-      <Form
-        className='flex-shrink-0 w-full max-w-sm bg-base-100'
-        method='post'
-        encType='multipart/form-data'
-      >
+      <Form className='flex-shrink-0 w-full max-w-sm bg-base-100' method='post'>
         <div className='form-control'>
           <label className='label' htmlFor='email'>
             <span className='label-text'>Email</span>
