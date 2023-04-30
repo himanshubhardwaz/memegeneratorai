@@ -79,7 +79,7 @@ export default function CreateMemePage() {
         </div>
       )}
       <Form
-        className='flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100'
+        className='flex-shrink-0 w-full max-w-sm bg-base-100'
         method='post'
         encType='multipart/form-data'
       >

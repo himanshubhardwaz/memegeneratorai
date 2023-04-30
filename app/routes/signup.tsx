@@ -60,7 +60,7 @@ export default function SignupPage() {
   return (
     <main className='flex min-h-screen flex-col items-center justify-center p-24 gap-8'>
       <Form
-        className='flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100'
+        className='flex-shrink-0 w-full max-w-sm bg-base-100'
         method='post'
         encType='multipart/form-data'
       >
