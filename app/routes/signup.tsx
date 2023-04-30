@@ -76,6 +76,26 @@ export default function SignupPage() {
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-center p-24 gap-8'>
+      {error && (
+        <div className='alert alert-error shadow-lg w-full max-w-sm'>
+          <div>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              className='stroke-current flex-shrink-0 h-6 w-6'
+              fill='none'
+              viewBox='0 0 24 24'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth='2'
+                d='M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z'
+              />
+            </svg>
+            <span>{error}</span>
+          </div>
+        </div>
+      )}
       <Form className='flex-shrink-0 w-full max-w-sm bg-base-100' method='post'>
         <div className='form-control'>
           <label className='label' htmlFor='email'>
@@ -85,7 +105,7 @@ export default function SignupPage() {
             type='email'
             name='email'
             required
-            className='file-input w-full max-w-xs file-input-bordered'
+            className='file-input w-full max-w-sm file-input-bordered'
           />
         </div>
 
@@ -97,12 +117,12 @@ export default function SignupPage() {
             type='password'
             name='password'
             required
-            className='file-input w-full max-w-xs file-input-bordered'
+            className='file-input w-full max-w-sm file-input-bordered'
           />
         </div>
         <div className='form-control mt-6'>
           <button
-            className='btn btn-primary w-full max-w-xs'
+            className='btn btn-primary w-full max-w-sm'
             type='submit'
             disabled={navigation.state === "submitting"}
           >

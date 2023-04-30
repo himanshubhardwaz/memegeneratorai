@@ -8,6 +8,7 @@ export const meta: V2_MetaFunction = () => {
 
 export async function loader({ request }: LoaderArgs) {
   await requireUserSession(request);
+  return null;
 }
 
 export default function Index() {

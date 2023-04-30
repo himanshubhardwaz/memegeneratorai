@@ -85,7 +85,7 @@ export default function SignupPage() {
   return (
     <main className='flex min-h-screen flex-col items-center justify-center p-24 gap-8'>
       {error && (
-        <div className='alert alert-error shadow-lg'>
+        <div className='alert alert-error shadow-lg w-full max-w-sm'>
           <div>
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -113,7 +113,7 @@ export default function SignupPage() {
             type='email'
             name='email'
             required
-            className='file-input w-full max-w-xs file-input-bordered'
+            className='file-input w-full max-w-sm file-input-bordered'
           />
         </div>
 
@@ -125,12 +125,12 @@ export default function SignupPage() {
             type='password'
             name='password'
             required
-            className='file-input w-full max-w-xs file-input-bordered'
+            className='file-input w-full max-w-sm file-input-bordered'
           />
         </div>
         <div className='form-control mt-6'>
           <button
-            className='btn btn-primary w-full max-w-xs'
+            className='btn btn-primary w-full max-w-sm'
             type='submit'
             disabled={navigation.state === "submitting"}
           >

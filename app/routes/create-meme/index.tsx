@@ -23,6 +23,7 @@ type actionData = TypedResponse<{
 
 export async function loader({ request }: LoaderArgs) {
   await requireUserSession(request);
+  return null;
 }
 
 export async function action({ request }: ActionArgs): Promise<actionData> {
