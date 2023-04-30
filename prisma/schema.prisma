@@ -39,4 +39,5 @@ model Meme {
   User      User?    @relation(fields: [userId], references: [id])
   userId    String
   url       String
+  caption   String
 }

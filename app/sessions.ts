@@ -11,7 +11,7 @@ export const { getSession, commitSession, destroySession } =
     },
   });
 
-type RequestArg = LoaderArgs["request"];
+export type RequestArg = LoaderArgs["request"];
 
 export async function requireUserSession(request: RequestArg) {
   // get the session

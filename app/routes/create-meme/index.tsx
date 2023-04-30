@@ -13,12 +13,13 @@ import {
 import { json } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { useNavigation } from "@remix-run/react";
-import getCaptionedImage from "~/utils/get-captioned-image.server";
+import { createMeme } from "~/utils/meme-services.server";
 import { requireUserSession } from "~/sessions";
+import type { Meme } from "@prisma/client";
 
 type actionData = TypedResponse<{
   error: Error | null;
-  captionedImageUrl: string | null;
+  meme: Meme | null;
 }>;
 
 export async function loader({ request }: LoaderArgs) {
@@ -43,25 +44,25 @@ export async function action({ request }: ActionArgs): Promise<actionData> {
   const memeImage = formData.get("memeImage") as NodeOnDiskFile;
   const memeImagePath = memeImage.getFilePath();
 
-  const response = await getCaptionedImage(memeImagePath);
+  const response = await createMeme(memeImagePath, request);
 
   if (response instanceof Error) {
-    return json({ error: response, captionedImageUrl: null });
+    return json({ error: response, meme: null });
   }
-  return json({ captionedImageUrl: response, error: null });
+  return json({ meme: response, error: null });
 }
 
 export default function CreateMemePage() {
   const data = useActionData<typeof action>();
   const navigation = useNavigation();
 
-  if (data?.captionedImageUrl) {
-    return (
-      <main className='flex min-h-screen flex-col items-center justify-center p-24 gap-8'>
-        <img src={data.captionedImageUrl} alt='' />
-      </main>
-    );
-  }
+  //if (data?.meme?.url) {
+  //  return (
+  //    <main className='flex min-h-screen flex-col items-center justify-center p-24 gap-8'>
+  //      <img src={data?.meme?.url} alt='' />
+  //    </main>
+  //  );
+  //}
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-center p-24 gap-8'>
