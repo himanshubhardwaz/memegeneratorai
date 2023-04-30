@@ -1,6 +1,6 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useLoaderData, useNavigation } from "@remix-run/react";
+import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
 import {
   createUserByEmailAndPassword,
   findUserByEmail,
@@ -106,12 +106,17 @@ export default function SignupPage() {
             type='submit'
             disabled={navigation.state === "submitting"}
           >
-            {navigation.state === "submitting"
-              ? "Loading..."
-              : "Create Profile"}
+            {navigation.state === "submitting" ? "Loading..." : "Sign Up"}
           </button>
         </div>
       </Form>
+      <div className='w-full max-w-sm'>
+        Already have an account?{" "}
+        <Link to='/login' className='underline'>
+          {" "}
+          Log In
+        </Link>
+      </div>
     </main>
   );
 }

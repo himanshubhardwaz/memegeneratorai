@@ -1,6 +1,6 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useLoaderData, useNavigation } from "@remix-run/react";
+import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
 import {
   findUserByEmail,
   checkPasswordValidity,
@@ -9,8 +9,6 @@ import { getSession, commitSession } from "~/sessions";
 
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-
-  console.log(session.has("userId"));
 
   if (session.has("userId")) {
     // Redirect to the home page if they are already signed in.
@@ -140,6 +138,13 @@ export default function SignupPage() {
           </button>
         </div>
       </Form>
+      <div className='w-full max-w-sm'>
+        Dont have an account yet?{" "}
+        <Link to='/signup' className='underline'>
+          {" "}
+          Sign Up
+        </Link>
+      </div>
     </main>
   );
 }

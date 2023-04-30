@@ -1,5 +1,6 @@
 import type {
   ActionArgs,
+  LoaderArgs,
   NodeOnDiskFile,
   TypedResponse,
 } from "@remix-run/node";
@@ -12,12 +13,17 @@ import {
 import { json } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { useNavigation } from "@remix-run/react";
-import getCaptionedImage from "../../utils/get-captioned-image.server";
+import getCaptionedImage from "~/utils/get-captioned-image.server";
+import { requireUserSession } from "~/sessions";
 
 type actionData = TypedResponse<{
   error: Error | null;
   captionedImageUrl: string | null;
 }>;
+
+export async function loader({ request }: LoaderArgs) {
+  await requireUserSession(request);
+}
 
 export async function action({ request }: ActionArgs): Promise<actionData> {
   const uploadHandler = unstable_composeUploadHandlers(
