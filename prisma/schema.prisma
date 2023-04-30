@@ -40,4 +40,5 @@ model Meme {
   userId    String
   url       String
   caption   String
+  isPublic  Boolean  @default(false)
 }
