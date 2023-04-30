@@ -10,6 +10,8 @@ import { getSession, commitSession } from "~/sessions";
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
 
+  console.log(session.has("userId"));
+
   if (session.has("userId")) {
     // Redirect to the home page if they are already signed in.
     return redirect("/");
