@@ -20,7 +20,7 @@ model User {
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   memes           Meme[]
-  //likedMemes      Meme[]
+  likedMemes      Likes[]
 }
 
 model RefreshToken {
@@ -34,13 +34,26 @@ model RefreshToken {
 }
 
 model Meme {
-  id         String   @id @unique @default(uuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  User       User?    @relation(fields: [userId], references: [id])
-  userId     String
-  url        String
-  caption    String
-  isPublic   Boolean  @default(false)
-  likesCount Int      @default(0)
+  id        String   @id @unique @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  User   User?  @relation(fields: [userId], references: [id])
+
+  url      String
+  caption  String
+  isPublic Boolean @default(false)
+
+  likes Likes[]
+}
+
+model Likes {
+  id String @id @unique @default(uuid())
+
+  memeId String
+  Meme   Meme   @relation(fields: [memeId], references: [id])
+
+  userId String
+  User   User   @relation(fields: [userId], references: [id])
 }
