@@ -19,7 +19,7 @@ export default function VerifyEmailPage() {
   const { message, error } = useLoaderData<typeof loader>();
   if (message) {
     return (
-      <main className='flex min-h-screen flex-col items-center justify-center p-8 gap-8'>
+      <main className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
         <div className='alert alert-success shadow-lg'>
           <div>
             <svg
