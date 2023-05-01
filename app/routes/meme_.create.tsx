@@ -65,7 +65,7 @@ export default function CreateMemePage() {
   //}
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-center p-24 gap-8'>
+    <main className='flex min-h-screen flex-col items-center justify-center p-8 gap-8'>
       {data?.error && (
         <div className='alert alert-error shadow-lg'>
           <div>
