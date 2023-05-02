@@ -37,3 +37,18 @@ export async function verifyUserEmail(id: string) {
     data: { isEmailVerified: true },
   });
 }
+
+export async function verifyForgotPasswordLink(forgotPasswordId: string) {
+  const forgotPasswordData = await prismaClient.forgotPassword.findUnique({
+    where: { id: forgotPasswordId },
+  });
+
+  return forgotPasswordData;
+}
+
+export async function changePassword(userId: string, password: string) {
+  return prismaClient.user.update({
+    where: { id: userId },
+    data: { password: bcrypt.hashSync(password, 12) },
+  });
+}
