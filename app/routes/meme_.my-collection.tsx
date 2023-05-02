@@ -24,8 +24,16 @@ export default function MyCollectionPage() {
 
   return (
     <main className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>
-      <h2>My collection</h2>
+      <h2 className='text-3xl font-semibold'>My collection</h2>
       <div className='flex gap-10 items-center justify-center flex-wrap'>
+        {data.userMemesWithcaptionedImageUrl.length === 0 && (
+          <>
+            <h3 className='text-xl'>You have not created any memes yet.</h3>
+            <Link to='/meme/create' className='link'>
+              Create now
+            </Link>
+          </>
+        )}
         {data.userMemesWithcaptionedImageUrl.map((meme) => (
           <>
             <div className='card w-96 bg-base-100 shadow-xl' key={meme.id}>
