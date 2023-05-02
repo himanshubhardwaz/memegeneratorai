@@ -10,5 +10,7 @@ export async function loader({ request }: LoaderArgs) {
 }
 
 export default function PopularMemesPage() {
-  return <>Popular memes collection!</>;
+  return (
+    <main className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'></main>
+  );
 }

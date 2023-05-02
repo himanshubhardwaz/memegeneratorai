@@ -2,10 +2,7 @@ import { Link } from "@remix-run/react";
 
 export default function Footer() {
   return (
-    <footer
-      className='footer items-center p-4 bg-neutral text-neutral-content'
-      style={{ height: "4rem" }}
-    >
+    <footer className='footer items-center p-4 bg-neutral text-neutral-content'>
       <div className='items-center grid-flow-col'>
         <img
           src='/pog-image.jpeg'
