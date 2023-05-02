@@ -4,14 +4,12 @@ import {
   Links,
   LiveReload,
   Meta,
-  Outlet,
   Scripts,
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
 
-import Navbar from "~/components/Navbar";
-import Footer from "~/components/Footer";
+import Layout from "~/components/Layout";
 import stylesheet from "~/tailwind.css";
 import { getSession } from "~/sessions";
 
@@ -27,7 +25,7 @@ export async function loader({ request }: LoaderArgs) {
 }
 
 export default function App() {
-  const data = useLoaderData<typeof loader>();
+  const data = useLoaderData<typeof loader>() || {};
 
   const userId = data?.userId;
   const name = data?.name;
@@ -66,9 +64,7 @@ export default function App() {
         <Links />
       </head>
       <body className='no-scrollbar'>
-        <Navbar userId={userId} name={name} />
-        <Outlet />
-        <Footer />
+        <Layout userId={userId} name={name} />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

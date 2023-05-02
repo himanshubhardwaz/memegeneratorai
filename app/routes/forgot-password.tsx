@@ -74,7 +74,7 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function SignupPage() {
-  const { error } = useLoaderData<typeof loader>();
+  const { error } = useLoaderData<typeof loader>() || {};
   const data = useActionData<typeof action>();
   const navigation = useNavigation();
 

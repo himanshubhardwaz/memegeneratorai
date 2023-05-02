@@ -16,7 +16,7 @@ export async function loader({ request }: LoaderArgs) {
 }
 
 export default function VerifyEmailPage() {
-  const { message, error } = useLoaderData<typeof loader>();
+  const { message, error } = useLoaderData<typeof loader>() || {};
   if (message) {
     return (
       <main className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>

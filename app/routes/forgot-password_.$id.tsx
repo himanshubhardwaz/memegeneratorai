@@ -68,7 +68,7 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function VerifyEmailPage() {
-  const { userId } = useLoaderData<typeof loader>();
+  const { userId } = useLoaderData<typeof loader>() || {};
   const navigation = useNavigation();
 
   const isLoading =

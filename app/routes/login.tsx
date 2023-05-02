@@ -101,7 +101,7 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function LoginPage() {
-  const { error, successAlert } = useLoaderData<typeof loader>();
+  const { error, successAlert } = useLoaderData<typeof loader>() || {};
   const navigation = useNavigation();
 
   const isLoading =

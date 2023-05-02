@@ -49,7 +49,7 @@ export async function action({ request, params }: ActionArgs) {
 }
 
 export default function MemeByIdPage() {
-  const data = useLoaderData<typeof loader>();
+  const data = useLoaderData<typeof loader>() || {};
   const navigation = useNavigation();
 
   const isLoading =

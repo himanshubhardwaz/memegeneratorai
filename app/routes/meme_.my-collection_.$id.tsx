@@ -67,7 +67,7 @@ export default function MemeByIdPage() {
     caption: "",
   });
 
-  const data = useLoaderData<typeof loader>();
+  const data = useLoaderData<typeof loader>() || {};
   const fetcher = useFetcher();
   const navigation = useNavigation();
   const modalToggleRef = useRef<HTMLLabelElement | null>(null);
