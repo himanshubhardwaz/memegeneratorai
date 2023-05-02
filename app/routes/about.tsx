@@ -1,3 +1,5 @@
+import { Link } from "@remix-run/react";
+
 export default function AboutPage() {
   return (
     <main className='flex min-h-[calc(100vh-8rem)] flex-col items-center p-8 gap-8 justify-center'>
@@ -30,10 +32,13 @@ export default function AboutPage() {
         </p>
         <br />
         <p className='text-xl leading-7 text-justify mb-10'>
-          So why wait? Sign up today and start creating memes that will have the
-          internet buzzing!. So what are you waiting for? Start exploring our
-          website today and unleash your creativity with our AI-powered meme
-          generator!
+          So why wait?{" "}
+          <Link to='/signup' className='link'>
+            Signup
+          </Link>{" "}
+          today and start creating memes that will have the internet buzzing!.
+          So what are you waiting for? Start exploring our website today and
+          unleash your creativity with our AI-powered meme generator!
         </p>
       </div>
     </main>

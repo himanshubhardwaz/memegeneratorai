@@ -59,12 +59,19 @@ export default function Navbar({
             tabIndex={0}
             className='menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52'
           >
-            <li>
-              <Link to='/meme/my-collection'>My collection</Link>
-            </li>
-            <li>
-              <Link to='/meme'>Popular memes</Link>
-            </li>
+            {userId && (
+              <>
+                <li>
+                  <Link to='/meme/create'>Create meme</Link>
+                </li>
+                <li>
+                  <Link to='/meme/my-collection'>My collection</Link>
+                </li>
+                <li>
+                  <Link to='/meme'>Popular memes</Link>
+                </li>
+              </>
+            )}
             <li>
               <Link to='/about'>About</Link>
             </li>
