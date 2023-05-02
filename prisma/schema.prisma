@@ -16,7 +16,7 @@ model User {
   isEmailVerified Boolean        @default(false)
   password        String
   refreshTokens   RefreshToken[]
-  name            String?
+  name            String
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   memes           Meme[]

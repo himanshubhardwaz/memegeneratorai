@@ -32,12 +32,15 @@ export async function action({ request }: ActionArgs) {
 
   const email = formData.get("email");
   const password = formData.get("password");
+  const name = formData.get("name");
 
   if (
     !email ||
     !password ||
+    !name ||
     typeof email !== "string" ||
-    typeof password !== "string"
+    typeof password !== "string" ||
+    typeof name !== "string"
   ) {
     return json(new Error("Invalid data provided"));
   }
@@ -54,7 +57,7 @@ export async function action({ request }: ActionArgs) {
     });
   }
 
-  const user = await createUserByEmailAndPassword({ email, password });
+  const user = await createUserByEmailAndPassword({ email, password, name });
 
   sendEmailVerificationMail({
     to: user.email,
@@ -62,6 +65,7 @@ export async function action({ request }: ActionArgs) {
   });
 
   session.set("userId", user.id);
+  session.set("name", user.name);
 
   return redirect("/", {
     headers: {
@@ -98,6 +102,18 @@ export default function SignupPage() {
       )}
       <Form className='flex-shrink-0 w-full max-w-sm bg-base-100' method='post'>
         <div className='form-control'>
+          <div className='form-control'>
+            <label className='label' htmlFor='name'>
+              <span className='label-text'>Full name</span>
+            </label>
+            <input
+              type='name'
+              name='name'
+              required
+              className='file-input w-full max-w-sm file-input-bordered'
+            />
+          </div>
+
           <label className='label' htmlFor='email'>
             <span className='label-text'>Email</span>
           </label>

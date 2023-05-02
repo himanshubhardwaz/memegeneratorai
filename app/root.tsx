@@ -1,4 +1,5 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -6,16 +7,30 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
-import Navbar from "~/components/Navbar";
 
+import Navbar from "~/components/Navbar";
 import stylesheet from "~/tailwind.css";
+import { getSession } from "~/sessions";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
 
+export async function loader({ request }: LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const name = session.get("name");
+  const userId = session.get("userId");
+  return json({ name, userId });
+}
+
 export default function App() {
+  const data = useLoaderData<typeof loader>();
+
+  const userId = data?.userId;
+  const name = data?.name;
+
   return (
     <html lang='en'>
       <head>
@@ -50,7 +65,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Navbar />
+        <Navbar userId={userId} name={name} />
         <Outlet />
         <ScrollRestoration />
         <Scripts />

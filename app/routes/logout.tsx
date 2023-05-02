@@ -1,7 +1,12 @@
-import type { ActionArgs } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { getSession, destroySession } from "~/sessions";
+import { getSession, destroySession, requireUserSession } from "~/sessions";
 import { Form, Link } from "@remix-run/react";
+
+export const loader = async ({ request }: LoaderArgs) => {
+  await requireUserSession(request);
+  return null;
+};
 
 export const action = async ({ request }: ActionArgs) => {
   const session = await getSession(request.headers.get("Cookie"));

@@ -69,6 +69,7 @@ export async function action({ request }: ActionArgs) {
   }
 
   session.set("userId", existingUser.id);
+  session.set("name", existingUser.name);
 
   // Login succeeded, send them to the home page.
   return redirect("/", {
