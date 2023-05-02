@@ -10,7 +10,7 @@ import {
   unstable_createMemoryUploadHandler,
   unstable_parseMultipartFormData,
 } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { useNavigation } from "@remix-run/react";
 import { createMeme } from "~/utils/meme-services.server";
@@ -49,20 +49,15 @@ export async function action({ request }: ActionArgs): Promise<actionData> {
   if (response instanceof Error) {
     return json({ error: response, meme: null });
   }
-  return json({ meme: response, error: null });
+  return redirect(`/meme/${response.id}`);
 }
 
 export default function CreateMemePage() {
   const data = useActionData<typeof action>();
   const navigation = useNavigation();
 
-  //if (data?.meme?.url) {
-  //  return (
-  //    <main className='flex min-h-screen flex-col items-center justify-center p-24 gap-8'>
-  //      <img src={data?.meme?.url} alt='' />
-  //    </main>
-  //  );
-  //}
+  const isLoading =
+    navigation.state === "submitting" || navigation.state === "loading";
 
   return (
     <main className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
@@ -107,9 +102,9 @@ export default function CreateMemePage() {
           <button
             className='btn btn-primary w-full max-w-xs'
             type='submit'
-            disabled={navigation.state === "submitting"}
+            disabled={isLoading}
           >
-            {navigation.state === "submitting" ? "Loading..." : "Create Meme"}
+            {isLoading ? "Loading..." : "Create Meme"}
           </button>
         </div>
       </Form>

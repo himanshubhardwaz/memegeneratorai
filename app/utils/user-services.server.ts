@@ -13,6 +13,8 @@ export async function createUserByEmailAndPassword(user: {
   return await prismaClient.user.create({ data: user });
 }
 
+ // 
+
 export async function findUserById(id: string) {
   return await prismaClient.user.findUnique({
     where: {

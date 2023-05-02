@@ -30,7 +30,7 @@ export function getCaptionedImageUrl(
     process.env.CLOUDINARY_CLOUD_NAME
   }/image/upload/w_800/l_text:arial_24:${encodeURIComponent(
     caption
-  )},g_south,y_-30,fl_relative,w_0.9/${imageIdentifier}`;
+  )},g_south,y_10,fl_relative,w_0.9/${imageIdentifier}`;
 
   return captionedImageUrl;
 }
@@ -43,19 +43,14 @@ export async function createMeme(image: string, request: RequestArg) {
     }
     const { uploadedImageUrl, caption } = response;
 
-    const captionedImageUrl = getCaptionedImageUrl(uploadedImageUrl, caption);
     const session = await requireUserSession(request);
     const userId = session.get("userId");
 
-    if (typeof captionedImageUrl === "string" && userId) {
-      const createdMeme = await prismaClient.meme.create({
-        data: { userId, url: captionedImageUrl, caption },
-      });
+    const createdMeme = await prismaClient.meme.create({
+      data: { userId, url: uploadedImageUrl, caption },
+    });
 
-      return createdMeme;
-    }
-
-    return new Error("Could not create meme :(");
+    return createdMeme;
   } catch (error) {
     return new Error("Something Went wrong");
   }
@@ -132,8 +127,20 @@ export async function getPopularMemes() {
   const popularMemes = await prismaClient.meme.findMany({
     take: 10,
     where: { isPublic: true },
-    orderBy: { likesCount: "desc" },
+    orderBy: [
+      {
+        updatedAt: "asc",
+      },
+    ],
   });
 
   return popularMemes;
+}
+
+export async function changeMemeCaption(memeId: string, newCaption: string) {
+  const updatedMeme = await prismaClient.meme.update({
+    where: { id: memeId },
+    data: { caption: newCaption },
+  });
+  return updatedMeme;
 }

@@ -3,7 +3,7 @@ import { Link } from "@remix-run/react";
 import { requireUserSession } from "~/sessions";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "New Remix App" }];
+  return [{ title: "Meme Mind Homepage" }];
 };
 
 export async function loader({ request }: LoaderArgs) {
