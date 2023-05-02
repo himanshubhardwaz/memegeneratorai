@@ -13,7 +13,7 @@ export async function loader({ request }: LoaderArgs) {
 
 export default function Index() {
   return (
-    <div className='hero min-h-[calc(100vh-4rem)]'>
+    <div className='hero min-h-[calc(100vh-8rem)]'>
       <div className='hero-overlay bg-opacity-60'></div>
       <div className='hero-content text-center text-neutral-content'>
         <div className='max-w-md'>

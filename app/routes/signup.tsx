@@ -82,7 +82,7 @@ export default function SignupPage() {
     navigation.state === "submitting" || navigation.state === "loading";
 
   return (
-    <main className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
+    <main className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>
       {error && (
         <div className='alert alert-error shadow-lg w-full max-w-sm'>
           <div>

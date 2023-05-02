@@ -19,7 +19,7 @@ export const action = async ({ request }: ActionArgs) => {
 
 export default function LogoutRoute() {
   return (
-    <main className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
+    <main className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>
       <p>Are you sure you want to log out?</p>
       <Form method='post'>
         <button>Logout</button>

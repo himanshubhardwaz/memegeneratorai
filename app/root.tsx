@@ -11,6 +11,7 @@ import {
 } from "@remix-run/react";
 
 import Navbar from "~/components/Navbar";
+import Footer from "~/components/Footer";
 import stylesheet from "~/tailwind.css";
 import { getSession } from "~/sessions";
 
@@ -64,9 +65,10 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className='no-scrollbar'>
         <Navbar userId={userId} name={name} />
         <Outlet />
+        <Footer />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

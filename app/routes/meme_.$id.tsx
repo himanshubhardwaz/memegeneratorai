@@ -56,8 +56,8 @@ export default function MemeByIdPage() {
     navigation.state === "submitting" || navigation.state === "loading";
 
   return (
-    <div className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
-      <img src={data.captionedImageUrl} alt='' />
+    <div className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>
+      <img src={data.captionedImageUrl} alt='' height='500' width='500' />
       <Form className='flex-shrink-0 w-full max-w-sm bg-base-100' method='POST'>
         <div className='form-control'>
           <label className='label' htmlFor='caption'>
