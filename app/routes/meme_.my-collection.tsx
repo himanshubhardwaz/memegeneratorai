@@ -50,9 +50,23 @@ export default function MyCollectionPage() {
                   {new Date(meme.createdAt).toLocaleTimeString("en-IN")}
                 </h3>
                 <p>{meme.caption}</p>
+                {/*<div className='flex items-center justify-center gap-2'>
+                    <label className='label' htmlFor='isPublic'>
+                      <span className='label-text'>Private</span>
+                    </label>
+                    <input
+                      type='checkbox'
+                      className='toggle'
+                      defaultChecked={meme.isPublic}
+                      name='isPublic'
+                    />
+                    <label className='label' htmlFor='isPublic'>
+                      <span className='label-text'>Public</span>
+                    </label>
+                  </div>*/}
                 <div className='card-actions justify-end'>
-                  <Link className='btn btn-primary' to={`/meme/${meme.id}`}>
-                    Edit caption
+                  <Link className='btn' to={`/meme/my-collection/${meme.id}`}>
+                    Edit Meme
                   </Link>
                 </div>
               </div>

@@ -3,7 +3,7 @@ import { json, redirect } from "@remix-run/node";
 import {
   getMemeById,
   getCaptionedImageUrl,
-  changeMemeCaption,
+  updateMeme,
 } from "~/utils/meme-services.server";
 import {
   isRouteErrorResponse,
@@ -41,7 +41,7 @@ export async function action({ request, params }: ActionArgs) {
     return json({ error: "Invalid data type" });
   }
   try {
-    await changeMemeCaption(id, changedCaption);
+    await updateMeme(id, changedCaption, false);
     return redirect(`/meme/${id}`);
   } catch (error) {
     return json({ error: "Could not update meme caption" });

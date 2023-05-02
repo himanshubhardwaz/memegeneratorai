@@ -137,10 +137,14 @@ export async function getPopularMemes() {
   return popularMemes;
 }
 
-export async function changeMemeCaption(memeId: string, newCaption: string) {
+export async function updateMeme(
+  memeId: string,
+  newCaption: string,
+  isPublic: boolean
+) {
   const updatedMeme = await prismaClient.meme.update({
     where: { id: memeId },
-    data: { caption: newCaption },
+    data: { caption: newCaption, isPublic },
   });
   return updatedMeme;
 }
