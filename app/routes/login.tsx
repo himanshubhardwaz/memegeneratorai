@@ -83,6 +83,9 @@ export default function SignupPage() {
   const { error } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
 
+  const isLoading =
+    navigation.state === "submitting" || navigation.state === "loading";
+
   return (
     <main className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
       {error && (
@@ -133,9 +136,9 @@ export default function SignupPage() {
           <button
             className='btn btn-primary w-full max-w-sm'
             type='submit'
-            disabled={navigation.state === "submitting"}
+            disabled={isLoading}
           >
-            {navigation.state === "submitting" ? "Loading..." : "Log In"}
+            {isLoading ? "Loading..." : "Log In"}
           </button>
         </div>
       </Form>
