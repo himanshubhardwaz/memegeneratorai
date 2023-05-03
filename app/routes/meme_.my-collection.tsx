@@ -37,32 +37,30 @@ export default function MyCollectionPage() {
           )}
         {data?.userMemesWithcaptionedImageUrl &&
           data?.userMemesWithcaptionedImageUrl?.map((meme) => (
-            <>
-              <div
-                className='card w-96 bg-base-100 shadow-xl mx-4'
-                key={meme.id}
-              >
-                <figure>
-                  <img
-                    src={meme.url}
-                    alt='MEME'
-                    className='h-88 w-88 object-cover'
-                  />
-                </figure>
-                <div className='card-body'>
-                  <h3 className='card-title'>
-                    {new Date(meme.createdAt).toLocaleDateString("en-IN")}{" "}
-                    {new Date(meme.createdAt).toLocaleTimeString("en-IN")}
-                  </h3>
-                  <p>{meme.caption}</p>
-                  <div className='card-actions justify-end'>
-                    <Link className='btn' to={`/meme/my-collection/${meme.id}`}>
-                      Edit Meme
-                    </Link>
-                  </div>
+            <div
+              className='card xs:w-88 md:w-96 bg-base-100 shadow-xl px-2'
+              key={meme.id}
+            >
+              <figure>
+                <img
+                  src={meme.url}
+                  alt='MEME'
+                  className='xs:h-88 xs:w-88 h-96 w-96 object-cover'
+                />
+              </figure>
+              <div className='card-body'>
+                <h3 className='card-title'>
+                  {new Date(meme.createdAt).toLocaleDateString("en-IN")}{" "}
+                  {new Date(meme.createdAt).toLocaleTimeString("en-IN")}
+                </h3>
+                <p>{meme.caption}</p>
+                <div className='card-actions justify-end'>
+                  <Link className='btn' to={`/meme/my-collection/${meme.id}`}>
+                    Edit Meme
+                  </Link>
                 </div>
               </div>
-            </>
+            </div>
           ))}
       </div>
     </main>
