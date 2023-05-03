@@ -38,12 +38,15 @@ export default function MyCollectionPage() {
         {data?.userMemesWithcaptionedImageUrl &&
           data?.userMemesWithcaptionedImageUrl?.map((meme) => (
             <>
-              <div className='card w-96 bg-base-100 shadow-xl' key={meme.id}>
+              <div
+                className='card w-96 bg-base-100 shadow-xl mx-4'
+                key={meme.id}
+              >
                 <figure>
                   <img
                     src={meme.url}
                     alt='MEME'
-                    className='h-96 w-96 object-cover'
+                    className='h-88 w-88 object-cover'
                   />
                 </figure>
                 <div className='card-body'>
