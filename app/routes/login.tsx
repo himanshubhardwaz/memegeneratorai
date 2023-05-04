@@ -104,7 +104,8 @@ export default function LoginPage() {
   const { error, successAlert } = useLoaderData<typeof loader>() || {};
   const navigation = useNavigation();
 
-  const isLoading = navigation.state === "submitting";
+  const isLoading =
+    navigation.state === "submitting" || navigation.state === "loading";
 
   return (
     <>

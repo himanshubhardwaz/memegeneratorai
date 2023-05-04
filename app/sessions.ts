@@ -6,8 +6,11 @@ export const { getSession, commitSession, destroySession } =
     // a Cookie from `createCookie` or the same CookieOptions to create one
     cookie: {
       name: "__session",
+      secure: process.env.NODE_ENV === "production",
       secrets: ["r3m1xr0ck5"],
       sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      httpOnly: true,
     },
   });
 

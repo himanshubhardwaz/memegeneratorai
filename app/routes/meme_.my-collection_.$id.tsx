@@ -12,8 +12,10 @@ import {
   useLoaderData,
   useFetcher,
 } from "@remix-run/react";
+import { requireUserSession } from "~/sessions";
 
 export async function loader({ request, params }: LoaderArgs) {
+  await requireUserSession(request);
   const id = params.id;
   if (!id) return redirect(`/meme`);
 
