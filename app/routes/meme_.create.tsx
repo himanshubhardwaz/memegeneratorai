@@ -49,7 +49,7 @@ export async function action({ request }: ActionArgs): Promise<actionData> {
   if (response instanceof Error) {
     return json({ error: response, meme: null });
   }
-  return redirect(`/meme/${response.id}`);
+  return redirect(`/meme/my-collection/${response.id}`);
 }
 
 export default function CreateMemePage() {

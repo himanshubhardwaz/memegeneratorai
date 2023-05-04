@@ -11,7 +11,8 @@ export default function Layout({
   userId: string;
   name: string;
 }) {
-  const outlet = useOutlet();
+const outlet = useOutlet();
+ 
   return (
     <>
       <Navbar userId={userId} name={name} />
