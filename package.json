@@ -17,12 +17,12 @@
     "bcrypt": "^5.1.0",
     "cloudinary": "^1.36.2",
     "daisyui": "^2.51.6",
+    "framer-motion": "^10.12.7",
     "isbot": "^3.6.8",
     "jsonwebtoken": "^9.0.0",
     "openai": "^3.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-transition-group": "^4.4.5",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

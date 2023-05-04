@@ -1,9 +1,8 @@
-import { SwitchTransition, CSSTransition } from "react-transition-group";
-import { useLocation } from "@remix-run/react";
-import { useRef } from "react";
-import AnimatedOutlet from "~/components/AnimatedOutlet";
+import { useLocation, useOutlet } from "@remix-run/react";
 import Navbar from "~/components/Navbar";
 import Footer from "~/components/Footer";
+
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function Layout({
   userId,
@@ -12,27 +11,21 @@ export default function Layout({
   userId: string;
   name: string;
 }) {
-  const location = useLocation();
-  const nodeRef = useRef(null);
+  const outlet = useOutlet();
   return (
     <>
       <Navbar userId={userId} name={name} />
-      <SwitchTransition>
-        <CSSTransition
-          key={location.pathname}
-          timeout={500}
-          nodeRef={nodeRef}
-          classNames={{
-            enter: "opacity-0",
-            enterActive: "opacity-100",
-            exitActive: "opacity-0",
-          }}
+      <AnimatePresence mode='wait' initial={false}>
+        <motion.main
+          key={useLocation().pathname}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
         >
-          <div ref={nodeRef} className='transition-all duration-500'>
-            <AnimatedOutlet />
-          </div>
-        </CSSTransition>
-      </SwitchTransition>
+          {outlet}
+        </motion.main>
+      </AnimatePresence>
       <Footer />
     </>
   );
