@@ -148,3 +148,7 @@ export async function updateMeme(
   });
   return updatedMeme;
 }
+
+export async function deleteMeme(id: string) {
+  return await prismaClient.meme.delete({ where: { id: id } });
+}
