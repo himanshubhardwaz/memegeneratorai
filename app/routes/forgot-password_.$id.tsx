@@ -71,8 +71,7 @@ export default function VerifyEmailPage() {
   const { userId } = useLoaderData<typeof loader>() || {};
   const navigation = useNavigation();
 
-  const isLoading =
-    navigation.state === "submitting" || navigation.state === "loading";
+  const isLoading = navigation.state === "submitting";
 
   return (
     <main className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>
