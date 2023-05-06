@@ -11,27 +11,17 @@ datasource db {
 }
 
 model User {
-  id              String           @id @unique @default(uuid())
-  email           String           @unique
-  isEmailVerified Boolean          @default(false)
+  id              String  @id @unique @default(uuid())
+  email           String  @unique
+  isEmailVerified Boolean @default(false)
   password        String
-  refreshTokens   RefreshToken[]
-  name            String
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  memes           Meme[]
-  likedMemes      Likes[]
-  forgotPassword  ForgotPassword[]
-}
 
-model RefreshToken {
-  id          String   @id @unique @default(uuid())
-  hashedToken String
-  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
-  revoked     Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  name           String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  memes          Meme[]
+  likedMemes     Likes[]
+  forgotPassword ForgotPassword[]
 }
 
 model Meme {
