@@ -81,7 +81,7 @@ export default function Navbar({
       <div className='navbar-center'>
         <Link to='/' className='flex items-center justify-center  ml-2'>
           <img
-            src='/pog-image.jpeg'
+            src='/pog-image.png'
             alt=''
             height='40'
             width='40'

@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className='footer items-center p-4 bg-neutral text-neutral-content'>
       <div className='items-center grid-flow-col'>
         <img
-          src='/pog-image.jpeg'
+          src='/pog-image.png'
           alt=''
           height='40'
           width='40'
