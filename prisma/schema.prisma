@@ -55,8 +55,8 @@ model Likes {
   memeId String
   Meme   Meme   @relation(fields: [memeId], references: [id])
 
-  userId String
-  User   User   @relation(fields: [userId], references: [id])
+  userId String?
+  User   User?   @relation(fields: [userId], references: [id])
 }
 
 model ForgotPassword {
