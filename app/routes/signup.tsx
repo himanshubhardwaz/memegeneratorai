@@ -70,6 +70,8 @@ export async function action({ request }: ActionArgs) {
 
   session.set("userId", user.id);
   session.set("name", user.name);
+  session.set("isEmailVerified", user.isEmailVerified);
+  session.set("email", user.email);
 
   return redirect("/", {
     headers: {

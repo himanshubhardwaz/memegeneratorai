@@ -7,9 +7,11 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function Layout({
   userId,
   name,
+  isEmailVerified,
 }: {
   userId: string;
   name: string;
+  isEmailVerified: boolean;
 }) {
   const outlet = useOutlet();
 

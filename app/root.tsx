@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderArgs } from "@remix-run/node";
+import type { ActionArgs, LinksFunction, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
   Links,
@@ -11,7 +11,8 @@ import {
 
 import Layout from "~/components/Layout";
 import stylesheet from "~/tailwind.css";
-import { getSession } from "~/sessions";
+import { commitSession, getSession } from "~/sessions";
+import Alerts from "./components/Alerts";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -21,7 +22,41 @@ export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const name = session.get("name");
   const userId = session.get("userId");
-  return json({ name, userId });
+  const isEmailVerified = session.get("isEmailVerified");
+
+  const successAlert = session.get("successAlert");
+  const errorAlert = session.get("errorAlert");
+  const infoAlert = session.get("infoAlert");
+
+  return json({
+    name,
+    userId,
+    isEmailVerified,
+    successAlert,
+    errorAlert,
+    infoAlert,
+  });
+}
+
+export async function action({ request }: ActionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  const formData = await request.formData();
+  const intent = formData.get("intent");
+
+  if (intent === "close-success-alert") {
+    session.unset("successAlert");
+  } else if (intent === "close-error-alert") {
+    session.unset("errorAlert");
+  } else if (intent === "close-info-alert") {
+    session.unset("infoAlert");
+  }
+
+  return json(null, {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 }
 
 export default function App() {
@@ -29,6 +64,11 @@ export default function App() {
 
   const userId = data?.userId;
   const name = data?.name;
+  const isEmailVerified = data?.isEmailVerified;
+
+  const successAlert = data?.successAlert;
+  const errorAlert = data?.errorAlert;
+  const infoAlert = data?.infoAlert;
 
   return (
     <html lang='en'>
@@ -64,7 +104,12 @@ export default function App() {
         <Links />
       </head>
       <body className='no-scrollbar'>
-        <Layout userId={userId} name={name} />
+        <Layout userId={userId} name={name} isEmailVerified={isEmailVerified} />
+        <Alerts
+          successAlert={successAlert}
+          infoAlert={infoAlert}
+          errorAlert={errorAlert}
+        />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

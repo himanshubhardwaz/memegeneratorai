@@ -14,14 +14,13 @@ export const meta: V2_MetaFunction = () => {
 export async function loader({ request }: LoaderArgs) {
   const session = await requireUserSession(request);
   const userId = session.get("userId");
-  const successAlert = session.get("successAlert");
 
   const userMemesCollection = await getUsersMemeCollection(userId);
   const userMemesWithcaptionedImageUrl = userMemesCollection.map((meme) => ({
     ...meme,
     captionedImageUrl: getCaptionedImageUrl(meme.url, meme.caption),
   }));
-  return json({ userMemesWithcaptionedImageUrl, successAlert });
+  return json({ userMemesWithcaptionedImageUrl });
 }
 
 export async function action({ request }: ActionArgs) {
@@ -98,37 +97,6 @@ export default function MyCollectionPage() {
               </div>
             ))}
         </div>
-        {data?.successAlert && (
-          <div className='toast toast-top '>
-            <div className='alert alert-success'>
-              <div>
-                <span>{data?.successAlert}</span>
-                <Form method='post'>
-                  <button
-                    className='mt-1'
-                    name='intent'
-                    value='close-success-alert'
-                  >
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke-width='1.5'
-                      stroke='currentColor'
-                      className='w-6 h-6'
-                    >
-                      <path
-                        stroke-linecap='round'
-                        stroke-linejoin='round'
-                        d='M6 18L18 6M6 6l12 12'
-                      />
-                    </svg>
-                  </button>
-                </Form>
-              </div>
-            </div>
-          </div>
-        )}
       </main>
     </>
   );

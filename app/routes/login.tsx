@@ -21,9 +21,6 @@ export async function loader({ request }: LoaderArgs) {
 
   const data = {
     error: session.get("error"),
-    successAlert: session.get("successAlert"),
-    infoAlert: session.get("infoAlert"),
-    errorAlert: session.get("errorAlert"),
   };
 
   return json(data, {
@@ -40,16 +37,6 @@ export async function action({ request }: ActionArgs) {
 
   const email = formData.get("email");
   const password = formData.get("password");
-  const intent = formData.get("intent");
-
-  if (intent === "close-success-alert") {
-    session.unset("successAlert");
-    return redirect("/login", {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    });
-  }
 
   if (
     !email ||
@@ -89,6 +76,8 @@ export async function action({ request }: ActionArgs) {
 
   session.set("userId", existingUser.id);
   session.set("name", existingUser.name);
+  session.set("isEmailVerified", existingUser.isEmailVerified);
+  session.set("email", existingUser.email);
 
   // Login succeeded, send them to the home page.
   return redirect("/", {
@@ -99,7 +88,7 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function LoginPage() {
-  const { error, successAlert } = useLoaderData<typeof loader>() || {};
+  const { error } = useLoaderData<typeof loader>() || {};
   const navigation = useNavigation();
 
   const isLoading = navigation.state === "submitting";
@@ -184,37 +173,6 @@ export default function LoginPage() {
             </Form>
           </div>
         </div>
-        {successAlert && (
-          <div className='toast toast-top '>
-            <div className='alert alert-success'>
-              <div>
-                <span>{successAlert}</span>
-                <Form method='post'>
-                  <button
-                    className='mt-1'
-                    name='intent'
-                    value='close-success-alert'
-                  >
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke-width='1.5'
-                      stroke='currentColor'
-                      className='w-6 h-6'
-                    >
-                      <path
-                        stroke-linecap='round'
-                        stroke-linejoin='round'
-                        d='M6 18L18 6M6 6l12 12'
-                      />
-                    </svg>
-                  </button>
-                </Form>
-              </div>
-            </div>
-          </div>
-        )}
       </main>
     </>
   );

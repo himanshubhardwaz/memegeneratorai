@@ -1,6 +1,7 @@
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { commitSession, getSession } from "~/sessions";
 import { verifyUserEmail } from "~/utils/user-services.server";
 
 export const meta: V2_MetaFunction = () => {
@@ -8,15 +9,29 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export async function loader({ request }: LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
   const url = new URL(request.url);
   const userId = url.searchParams.get("id");
   if (userId) {
     const verifiedUser = await verifyUserEmail(userId);
     if (verifiedUser) {
-      return json({ message: "Email successfully verified!", error: null });
+      if (session.get("userId") === userId) {
+        session.set("isEmailVerified", true);
+      }
+      session.set("successAlert", "Successfully verified email");
+      return redirect("/login", {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
     }
   }
-  return json({ error: "Invalid verification link :(", message: null });
+  session.set("errorAlert", "Could not verify email, please try again.");
+  return redirect("/login", {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 }
 
 export default function VerifyEmailPage() {

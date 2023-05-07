@@ -11,7 +11,6 @@ import {
   useRouteError,
   useLoaderData,
   useFetcher,
-  Form,
 } from "@remix-run/react";
 import { commitSession, requireUserSession } from "~/sessions";
 
@@ -24,8 +23,6 @@ export async function loader({ request, params }: LoaderArgs) {
   const id = params.id;
   if (!id) return redirect(`/meme`);
 
-  const successAlert = session.get("successAlert");
-
   const meme = await getMemeById(id, request);
 
   if (meme instanceof Error) {
@@ -35,7 +32,7 @@ export async function loader({ request, params }: LoaderArgs) {
   const captionedImageUrl = getCaptionedImageUrl(meme.url, meme.caption);
 
   return json(
-    { meme, captionedImageUrl, successAlert },
+    { meme, captionedImageUrl },
     {
       headers: {
         "Set-Cookie": await commitSession(session),
@@ -49,15 +46,6 @@ export async function action({ request, params }: ActionArgs) {
   const id = params.id;
   const formData = await request.formData();
   const intent = formData.get("intent");
-
-  if (intent === "close-success-alert") {
-    session.unset("successAlert");
-    return redirect(`/meme/my-collection/${id}`, {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    });
-  }
 
   if (intent === "delete" && typeof id === "string") {
     await deleteMeme(id);
@@ -200,37 +188,6 @@ export default function MemeByIdPage() {
           description={data.meme.description}
         />
         <DeleteMemeForm />
-        {data?.successAlert && (
-          <div className='toast toast-top '>
-            <div className='alert alert-success'>
-              <div>
-                <span>{data?.successAlert}</span>
-                <Form method='post'>
-                  <button
-                    className='mt-1'
-                    name='intent'
-                    value='close-success-alert'
-                  >
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke-width='1.5'
-                      stroke='currentColor'
-                      className='w-6 h-6'
-                    >
-                      <path
-                        stroke-linecap='round'
-                        stroke-linejoin='round'
-                        d='M6 18L18 6M6 6l12 12'
-                      />
-                    </svg>
-                  </button>
-                </Form>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
