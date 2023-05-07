@@ -1,7 +1,7 @@
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
-import { requireUserSession } from "~/sessions";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { Form, Link, useLoaderData } from "@remix-run/react";
+import { commitSession, requireUserSession } from "~/sessions";
 import {
   getCaptionedImageUrl,
   getUsersMemeCollection,
@@ -14,13 +14,31 @@ export const meta: V2_MetaFunction = () => {
 export async function loader({ request }: LoaderArgs) {
   const session = await requireUserSession(request);
   const userId = session.get("userId");
+  const successAlert = session.get("successAlert");
 
   const userMemesCollection = await getUsersMemeCollection(userId);
   const userMemesWithcaptionedImageUrl = userMemesCollection.map((meme) => ({
     ...meme,
     captionedImageUrl: getCaptionedImageUrl(meme.url, meme.caption),
   }));
-  return json({ userMemesWithcaptionedImageUrl });
+  return json({ userMemesWithcaptionedImageUrl, successAlert });
+}
+
+export async function action({ request }: ActionArgs) {
+  const session = await requireUserSession(request);
+  const formData = await request.formData();
+  const intent = formData.get("intent");
+
+  if (intent === "close-success-alert") {
+    session.unset("successAlert");
+    return redirect(`/meme/my-collection`, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
+
+  throw new Error("Invalid action!");
 }
 
 export default function MyCollectionPage() {
@@ -80,6 +98,37 @@ export default function MyCollectionPage() {
               </div>
             ))}
         </div>
+        {data?.successAlert && (
+          <div className='toast toast-top '>
+            <div className='alert alert-success'>
+              <div>
+                <span>{data?.successAlert}</span>
+                <Form method='post'>
+                  <button
+                    className='mt-1'
+                    name='intent'
+                    value='close-success-alert'
+                  >
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke-width='1.5'
+                      stroke='currentColor'
+                      className='w-6 h-6'
+                    >
+                      <path
+                        stroke-linecap='round'
+                        stroke-linejoin='round'
+                        d='M6 18L18 6M6 6l12 12'
+                      />
+                    </svg>
+                  </button>
+                </Form>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </>
   );

@@ -90,12 +90,6 @@ export async function action({ request }: ActionArgs) {
   session.set("userId", existingUser.id);
   session.set("name", existingUser.name);
 
-  if (session.has("successAlert")) {
-    setTimeout(() => {
-      session.unset("successAlert");
-    }, 3000);
-  }
-
   // Login succeeded, send them to the home page.
   return redirect("/", {
     headers: {

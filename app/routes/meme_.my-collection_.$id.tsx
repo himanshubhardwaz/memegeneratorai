@@ -11,17 +11,20 @@ import {
   useRouteError,
   useLoaderData,
   useFetcher,
+  Form,
 } from "@remix-run/react";
-import { requireUserSession } from "~/sessions";
+import { commitSession, requireUserSession } from "~/sessions";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Edit meme" }];
 };
 
 export async function loader({ request, params }: LoaderArgs) {
-  await requireUserSession(request);
+  const session = await requireUserSession(request);
   const id = params.id;
   if (!id) return redirect(`/meme`);
+
+  const successAlert = session.get("successAlert");
 
   const meme = await getMemeById(id, request);
 
@@ -31,17 +34,39 @@ export async function loader({ request, params }: LoaderArgs) {
 
   const captionedImageUrl = getCaptionedImageUrl(meme.url, meme.caption);
 
-  return json({ meme, captionedImageUrl });
+  return json(
+    { meme, captionedImageUrl, successAlert },
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    }
+  );
 }
 
 export async function action({ request, params }: ActionArgs) {
+  const session = await requireUserSession(request);
   const id = params.id;
   const formData = await request.formData();
   const intent = formData.get("intent");
 
+  if (intent === "close-success-alert") {
+    session.unset("successAlert");
+    return redirect(`/meme/my-collection/${id}`, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
+
   if (intent === "delete" && typeof id === "string") {
     await deleteMeme(id);
-    return redirect(`/meme/my-collection`);
+    session.set("successAlert", "Successfully deleted meme");
+    return redirect(`/meme/my-collection`, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   }
 
   if (intent === "update") {
@@ -61,8 +86,18 @@ export async function action({ request, params }: ActionArgs) {
     }
 
     try {
-      await updateMeme(id, description, isDescriptionUpdated, isPublic);
-      return redirect(`/meme/my-collection/${id}`);
+      const updatedMeme = await updateMeme(
+        id,
+        description,
+        isDescriptionUpdated,
+        isPublic
+      );
+      if (updatedMeme) session.set("successAlert", "Successfully updated meme");
+      return redirect(`/meme/my-collection/${id}`, {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
     } catch (error) {
       return json({ error: "Could not update meme caption" });
     }
@@ -165,6 +200,37 @@ export default function MemeByIdPage() {
           description={data.meme.description}
         />
         <DeleteMemeForm />
+        {data?.successAlert && (
+          <div className='toast toast-top '>
+            <div className='alert alert-success'>
+              <div>
+                <span>{data?.successAlert}</span>
+                <Form method='post'>
+                  <button
+                    className='mt-1'
+                    name='intent'
+                    value='close-success-alert'
+                  >
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke-width='1.5'
+                      stroke='currentColor'
+                      className='w-6 h-6'
+                    >
+                      <path
+                        stroke-linecap='round'
+                        stroke-linejoin='round'
+                        d='M6 18L18 6M6 6l12 12'
+                      />
+                    </svg>
+                  </button>
+                </Form>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
