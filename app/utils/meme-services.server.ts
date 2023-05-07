@@ -48,7 +48,10 @@ export function getCaptionedImageUrl(
 
   const imageIdentifier = uploadedImageParts[uploadedImageParts.length - 1];
 
-  let purifiedCaption = caption.replace(/[\r\n]+/gm, "").replace(/,/g, "");
+  let purifiedCaption = caption
+    .replace(/[\r\n]+/gm, "")
+    .replace(/,/g, "")
+    .replace(/"/g, "");
 
   //if (purifiedCaption.length >= 20) {
   //  purifiedCaption =
@@ -64,7 +67,7 @@ export function getCaptionedImageUrl(
 
   let captionedImageUrl = `https://res.cloudinary.com/${
     process.env.CLOUDINARY_CLOUD_NAME
-  }/image/upload/w_800/l_text:arial_24_bold:${purifiedCaption.trim()},g_south,y_10,fl_relative,w_0.9/${imageIdentifier}`.trim();
+  }/image/upload/w_800/l_text:arial_24_bold:${purifiedCaption.trim()},g_south,y_10,fl_relative,w_0.95/${imageIdentifier}`.trim();
 
   return captionedImageUrl;
 }
