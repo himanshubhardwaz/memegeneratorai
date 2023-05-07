@@ -71,9 +71,11 @@ export async function action({ request, params }: ActionArgs) {
 function UpdateMemeForm({
   isPublic,
   caption,
+  description,
 }: {
   isPublic: boolean;
   caption: string;
+  description: string;
 }) {
   const fetcher = useFetcher();
 
@@ -92,6 +94,21 @@ function UpdateMemeForm({
         type='hidden'
         name='initialIsPublic'
       />
+
+      <div className='form-control'>
+        <label className='label' htmlFor='desciption'>
+          <span className='label-text'>desciption</span>
+        </label>
+        <textarea
+          className='textarea textarea-bordered'
+          defaultValue={description}
+          name='desciption'
+          data-gramm='false'
+          data-gramm_editor='false'
+          data-enable-grammarly='false'
+        />
+      </div>
+
       <div className='form-control'>
         <label className='label' htmlFor='caption'>
           <span className='label-text'>Caption</span>
@@ -161,6 +178,7 @@ export default function MemeByIdPage() {
         <UpdateMemeForm
           isPublic={data.meme.isPublic}
           caption={data.meme.caption}
+          description={data.meme.description}
         />
         <DeleteMemeForm />
       </div>

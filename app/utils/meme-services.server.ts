@@ -26,11 +26,11 @@ export function getCaptionedImageUrl(
 
   const imageIdentifier = uploadedImageParts[uploadedImageParts.length - 1];
 
-  const captionedImageUrl = `https://res.cloudinary.com/${
+  let purifiedCaption = caption.replace(/[\r\n]+/gm, "").replace(/,/g, "");
+
+  let captionedImageUrl = `https://res.cloudinary.com/${
     process.env.CLOUDINARY_CLOUD_NAME
-  }/image/upload/w_800/l_text:arial_24:${encodeURIComponent(
-    caption
-  )},g_south,y_10,fl_relative,w_0.9/${imageIdentifier}`;
+  }/image/upload/w_800/l_text:arial_24_bold:${purifiedCaption.trim()},g_south,y_10,fl_relative,w_0.9/${imageIdentifier}`.trim();
 
   return captionedImageUrl;
 }
@@ -58,8 +58,6 @@ export async function createMeme(
         description,
       },
     });
-
-    console.log({ createdMeme });
 
     return createdMeme;
   } catch (error) {
