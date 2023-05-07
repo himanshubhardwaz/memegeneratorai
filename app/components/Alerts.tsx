@@ -11,6 +11,11 @@ export default function Alerts({
 }) {
   const fetcher = useFetcher();
 
+  const isLoading =
+    fetcher.state === "loading" || fetcher.state === "submitting";
+
+  if (isLoading) return null;
+
   if (successAlert) {
     return (
       <div className='toast toast-top'>
