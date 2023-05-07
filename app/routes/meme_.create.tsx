@@ -252,7 +252,6 @@ function ResendVerificationEmailForm() {
 }
 
 export default function CreateMemePage() {
-  const data = useActionData<typeof action>();
   return (
     <main className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>
       <CreateMemeForm />
