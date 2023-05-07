@@ -152,3 +152,14 @@ export async function updateMeme(
 export async function deleteMeme(id: string) {
   return await prismaClient.meme.delete({ where: { id: id } });
 }
+
+export async function getPublicMemes() {
+  return await prismaClient.meme.findMany({
+    where: { isPublic: true },
+    orderBy: [
+      {
+        updatedAt: "asc",
+      },
+    ],
+  });
+}
