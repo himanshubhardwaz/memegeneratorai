@@ -25,7 +25,7 @@ export async function loader() {
 }
 
 export default function Index() {
-  const { userCount, memeCount } = useLoaderData<typeof loader>();
+  const data = useLoaderData<typeof loader>() || {};
   return (
     <div className='min-h-[calc(100vh-8rem)] flex flex-col gap-20 items-center justify-center py-10 px-4 md:mt-20'>
       <section className='grid grid-cols-1 lg:grid-cols-2 max-w-4xl justify-items-center gap-4'>
@@ -56,9 +56,9 @@ export default function Index() {
 
       <section className='max-w-4xl mt-12'>
         <p className='text-3xl font-semibold'>
-          Join the <span className='text-secondary'>{userCount}</span> users
-          creating <span className='text-accent'>{memeCount}</span> memes so
-          far!
+          Join the <span className='text-secondary'>{data?.userCount}</span>{" "}
+          users creating <span className='text-accent'>{data?.memeCount}</span>{" "}
+          memes so far!
         </p>
       </section>
 

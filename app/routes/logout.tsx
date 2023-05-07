@@ -26,9 +26,11 @@ export default function LogoutRoute() {
     <main className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>
       <p>Are you sure you want to log out?</p>
       <Form method='post'>
-        <button>Logout</button>
+        <button className='btn btn-error'>Logout</button>
       </Form>
-      <Link to='/'>Never mind</Link>
+      <Link to='/' className='btn btn-outline btn-success'>
+        Never mind
+      </Link>
     </main>
   );
 }
