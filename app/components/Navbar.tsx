@@ -12,7 +12,7 @@ const navigation = [
   },
   { name: "Explore", href: "/meme", current: false, access: "public" },
   { name: "My Collection", href: "/meme/my-collection", current: false },
-  { name: "About", href: "/about", current: false },
+  { name: "About", href: "/about", current: false, access: "public" },
 ];
 
 function classNames(...classes: any) {
