@@ -35,20 +35,31 @@ export function getCaptionedImageUrl(
   return captionedImageUrl;
 }
 
-export async function createMeme(image: string, request: RequestArg) {
+export async function createMeme(
+  image: string,
+  userDescription: string,
+  request: RequestArg
+) {
   try {
-    const response = await getImageAndUrl(image);
+    const response = await getImageAndUrl(image, userDescription);
     if (response instanceof Error) {
       return new Error("Something Went wrong");
     }
-    const { uploadedImageUrl, caption } = response;
+    const { uploadedImageUrl, caption, description } = response;
 
     const session = await requireUserSession(request);
     const userId = session.get("userId");
 
     const createdMeme = await prismaClient.meme.create({
-      data: { userId, url: uploadedImageUrl, caption },
+      data: {
+        userId,
+        url: uploadedImageUrl,
+        caption,
+        description,
+      },
     });
+
+    console.log({ createdMeme });
 
     return createdMeme;
   } catch (error) {
@@ -57,19 +68,26 @@ export async function createMeme(image: string, request: RequestArg) {
 }
 
 export async function getImageAndUrl(
-  image: string
-): Promise<{ uploadedImageUrl: string; caption: string } | Error> {
+  image: string,
+  userDescription: string
+): Promise<
+  { uploadedImageUrl: string; caption: string; description: string } | Error
+> {
   const response = await cloudinary.uploader.upload(image);
 
   const uploadedImageUrl = response?.secure_url;
 
   // image recogition model
-  const res = await fetch(
-    `https://flask-production-fd24.up.railway.app?image=${uploadedImageUrl}`
-  );
+  let description = userDescription;
 
-  const result = await res.json();
-  const description = result.description;
+  if (!description) {
+    const res = await fetch(
+      `https://flask-production-fd24.up.railway.app?image=${uploadedImageUrl}`
+    );
+
+    const result = await res.json();
+    description = result.description;
+  }
 
   // openai to get image caption
   let caption = "";
@@ -87,7 +105,9 @@ export async function getImageAndUrl(
 
     caption = response.data.choices[0].text ?? "";
 
-    return { uploadedImageUrl, caption };
+    console.log({ uploadedImageUrl, caption, description });
+
+    return { uploadedImageUrl, caption, description };
   } catch (error) {
     console.log("Error --->>> ", error);
   }

@@ -17,6 +17,7 @@ import { useNavigation } from "@remix-run/react";
 import { createMeme } from "~/utils/meme-services.server";
 import { requireUserSession } from "~/sessions";
 import type { Meme } from "@prisma/client";
+import { useState } from "react";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Mememind create meme" }];
@@ -48,18 +49,28 @@ export async function action({ request }: ActionArgs): Promise<actionData> {
 
   const memeImage = formData.get("memeImage") as NodeOnDiskFile;
   const memeImagePath = memeImage.getFilePath();
+  const description = formData.get("description");
 
-  const response = await createMeme(memeImagePath, request);
-
-  if (response instanceof Error) {
-    return json({ error: response, meme: null });
+  if (typeof description === "string") {
+    const response = await createMeme(memeImagePath, description, request);
+    if (response instanceof Error) {
+      return json({ error: response, meme: null });
+    }
+    return redirect(`/meme/my-collection/${response.id}`);
   }
-  return redirect(`/meme/my-collection/${response.id}`);
+  return json({ error: new Error("Something went wrong"), meme: null });
 }
 
 export default function CreateMemePage() {
   const data = useActionData<typeof action>();
   const navigation = useNavigation();
+
+  const [showImageDescriptionArea, setShowImageDescriptionArea] =
+    useState(false);
+
+  const handleChange = () => {
+    setShowImageDescriptionArea((prev) => !prev);
+  };
 
   const isLoading = navigation.state === "submitting";
 
@@ -86,10 +97,18 @@ export default function CreateMemePage() {
         </div>
       )}
       <Form
-        className='flex-shrink-0 w-full max-w-sm bg-base-100'
+        className='flex-shrink-0 w-full max-w-sm bg-base-100 items-center justify-center'
         method='post'
         encType='multipart/form-data'
       >
+        <div className='form-control'>
+          <label>
+            <p className='font-semibold text-3xl text-center w-full max-w-xs mb-10'>
+              Create Meme
+            </p>
+          </label>
+        </div>
+
         <div className='form-control'>
           <label className='label' htmlFor='memeImage'>
             <span className='label-text'>Upload image</span>
@@ -102,9 +121,39 @@ export default function CreateMemePage() {
             className='file-input w-full max-w-xs'
           />
         </div>
+
+        <div className='form-control mt-6'>
+          <label className='label cursor-pointer max-w-xs'>
+            <span className='label-text'>Let AI generate image desciption</span>
+            <input
+              type='checkbox'
+              checked={!showImageDescriptionArea}
+              onChange={handleChange}
+              className='checkbox'
+            />
+          </label>
+        </div>
+
+        <div
+          className={`form-control ${showImageDescriptionArea ? "" : "hidden"}`}
+        >
+          <label className='label' htmlFor='description'>
+            <span className='label-text'>Image description</span>
+          </label>
+          <textarea
+            className='textarea textarea-bordered max-w-xs'
+            name='description'
+            placeholder='Describe image in less than 100 characters'
+            maxLength={100}
+            data-gramm='false'
+            data-gramm_editor='false'
+            data-enable-grammarly='false'
+          />
+        </div>
+
         <div className='form-control mt-6'>
           <button
-            className='btn btn-primary w-full max-w-xs'
+            className='btn w-full max-w-xs btn-outline btn-accent'
             type='submit'
             disabled={isLoading}
           >
