@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   getMemeById,
@@ -13,6 +13,10 @@ import {
   useFetcher,
 } from "@remix-run/react";
 import { requireUserSession } from "~/sessions";
+
+export const meta: V2_MetaFunction = () => {
+  return [{ title: "Edit meme" }];
+};
 
 export async function loader({ request, params }: LoaderArgs) {
   await requireUserSession(request);

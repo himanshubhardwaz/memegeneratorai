@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
@@ -12,6 +12,10 @@ import {
   verifyForgotPasswordLink,
   changePassword,
 } from "~/utils/user-services.server";
+
+export const meta: V2_MetaFunction = () => {
+  return [{ title: "Change Password" }];
+};
 
 export async function loader({ request, params }: LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));

@@ -2,10 +2,10 @@ import { Link } from "@remix-run/react";
 
 export default function Footer() {
   return (
-    <footer className='footer items-center p-4 bg-neutral text-neutral-content'>
+    <footer className='footer items-center p-4'>
       <div className='items-center grid-flow-col'>
         <img
-          src='/pog-image.png'
+          src='/images/icon.png'
           alt=''
           height='40'
           width='40'

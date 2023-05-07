@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
 import {
@@ -6,6 +6,10 @@ import {
   checkPasswordValidity,
 } from "~/utils/user-services.server";
 import { getSession, commitSession } from "~/sessions";
+
+export const meta: V2_MetaFunction = () => {
+  return [{ title: "Mememing login" }];
+};
 
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));

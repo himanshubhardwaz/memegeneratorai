@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
@@ -10,6 +10,10 @@ import {
 import { findUserByEmail } from "~/utils/user-services.server";
 import { getSession, commitSession } from "~/sessions";
 import { sendForgotPasswordVerificationMail } from "~/utils/send-verification-mail.server";
+
+export const meta: V2_MetaFunction = () => {
+  return [{ title: "Mememind forgot password page" }];
+};
 
 export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request.headers.get("Cookie"));

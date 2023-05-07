@@ -1,7 +1,11 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { verifyUserEmail } from "~/utils/user-services.server";
+
+export const meta: V2_MetaFunction = () => {
+  return [{ title: "Email verification" }];
+};
 
 export async function loader({ request }: LoaderArgs) {
   const url = new URL(request.url);

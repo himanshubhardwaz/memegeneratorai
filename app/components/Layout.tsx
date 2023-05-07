@@ -11,10 +11,10 @@ export default function Layout({
   userId: string;
   name: string;
 }) {
-const outlet = useOutlet();
- 
+  const outlet = useOutlet();
+
   return (
-    <>
+    <div>
       <Navbar userId={userId} name={name} />
       <AnimatePresence mode='wait' initial={false}>
         <motion.main
@@ -28,6 +28,6 @@ const outlet = useOutlet();
         </motion.main>
       </AnimatePresence>
       <Footer />
-    </>
+    </div>
   );
 }

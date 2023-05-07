@@ -3,6 +3,7 @@ import type {
   LoaderArgs,
   NodeOnDiskFile,
   TypedResponse,
+  V2_MetaFunction,
 } from "@remix-run/node";
 import {
   unstable_composeUploadHandlers,
@@ -16,6 +17,10 @@ import { useNavigation } from "@remix-run/react";
 import { createMeme } from "~/utils/meme-services.server";
 import { requireUserSession } from "~/sessions";
 import type { Meme } from "@prisma/client";
+
+export const meta: V2_MetaFunction = () => {
+  return [{ title: "Mememind create meme" }];
+};
 
 type actionData = TypedResponse<{
   error: Error | null;
@@ -94,7 +99,7 @@ export default function CreateMemePage() {
             name='memeImage'
             required
             accept='image/png, image/jpeg'
-            className='file-input w-full max-w-xs file-input-bordered'
+            className='file-input w-full max-w-xs'
           />
         </div>
         <div className='form-control mt-6'>

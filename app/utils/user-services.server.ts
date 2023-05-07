@@ -52,3 +52,32 @@ export async function changePassword(userId: string, password: string) {
     data: { password: bcrypt.hashSync(password, 12) },
   });
 }
+
+export async function getUserAndMemeCount() {
+  const userCountPromise = async () => {
+    return await prismaClient.user.count();
+  };
+
+  const memeCountPromise = async () => {
+    return await prismaClient.meme.count();
+  };
+
+  const [userCount, memeCount] = await Promise.allSettled([
+    userCountPromise(),
+    memeCountPromise(),
+  ]);
+
+  if (userCount.status === "fulfilled" && memeCount.status === "fulfilled") {
+    return { userCount: userCount.value, memeCount: memeCount.value };
+  }
+
+  if (userCount.status === "fulfilled") {
+    return { userCount: userCount.value, memeCount: null };
+  }
+
+  if (memeCount.status === "fulfilled") {
+    return { userCount: null, memeCount: memeCount.value };
+  }
+
+  return { memeCount: null, userCount: null };
+}

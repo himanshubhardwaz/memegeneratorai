@@ -1,7 +1,11 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { getSession, destroySession, requireUserSession } from "~/sessions";
 import { Form, Link } from "@remix-run/react";
+
+export const meta: V2_MetaFunction = () => {
+  return [{ title: "Mememind logout" }];
+};
 
 export const loader = async ({ request }: LoaderArgs) => {
   await requireUserSession(request);
