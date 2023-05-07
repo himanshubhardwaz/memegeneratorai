@@ -12,7 +12,7 @@ import {
   unstable_parseMultipartFormData,
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { useActionData, useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import { createMeme } from "~/utils/meme-services.server";
 import { requireUserSession } from "~/sessions";
 import type { Meme } from "@prisma/client";

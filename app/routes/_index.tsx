@@ -35,12 +35,13 @@ export default function Index() {
           </p>
           <p className='text-xl mt-5'>
             Make and share funny memes, Because Life's Too Short to Be Serious.{" "}
-            <br />
-            Say Goodbye to Human Creativity: Let AI Do the Work for You.
+            Say Goodbye to Human Creativity: Let AI Do the Work for You 😅.
           </p>
-          <Link to='/meme/create' className='btn mt-4 btn-primary'>
-            Get Started
-          </Link>
+          <div className='flex items-center justify-center lg:justify-start '>
+            <Link to='/meme/create' className='btn my-4 btn-primary'>
+              Get Started
+            </Link>
+          </div>
         </div>
         <div className='m-auto'>
           <img
