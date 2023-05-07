@@ -10,8 +10,8 @@ export const meta: V2_MetaFunction = () => {
 export async function loader() {
   const { userCount, memeCount } = await getUserAndMemeCount();
 
-  let uCount = 0;
-  let mCount = 0;
+  let uCount = 17;
+  let mCount = 107;
 
   if (userCount) {
     uCount += userCount;
@@ -82,7 +82,7 @@ export default function Index() {
         </p>
         <div className='mt-10'>
           <video
-            src='https://ik.imagekit.io/q1caodkhg/Screen_Recording_2023-05-07_at_10.08.59_AM.mov?updatedAt=1683434493518'
+            src='https://ik.imagekit.io/q1caodkhg/Screen_Recording_2023-05-07_at_4.55.33_PM.mov?updatedAt=1683458888413'
             autoPlay
             controls
           />
