@@ -153,6 +153,7 @@ export async function getMemeById(
 export async function getUsersMemeCollection(userId: string) {
   const usersMemeCollection = await prismaClient.meme.findMany({
     where: { userId: userId },
+    //include: { likes: true },
   });
 
   return usersMemeCollection;
@@ -203,6 +204,7 @@ export async function deleteMeme(id: string) {
 export async function getPublicMemes() {
   return await prismaClient.meme.findMany({
     where: { isPublic: true },
+    //include: { likes: true },
     orderBy: [
       {
         updatedAt: "asc",
@@ -210,3 +212,21 @@ export async function getPublicMemes() {
     ],
   });
 }
+
+//export async function toggleMemeLike(
+//  memeId: string,
+//  userId: string,
+//  like: boolean
+//) {
+//  if (like) {
+//    const likedMeme = await prismaClient.likes.findMany({
+//      where: { memeId, userId },
+//    });
+
+//    if (likedMeme) return likedMeme;
+
+//    else return await prismaClient.likes.create({
+
+//    })
+//  }
+//}
