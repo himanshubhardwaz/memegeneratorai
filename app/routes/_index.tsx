@@ -10,8 +10,8 @@ export const meta: V2_MetaFunction = () => {
 export async function loader() {
   const { userCount, memeCount } = await getUserAndMemeCount();
 
-  let uCount = 21;
-  let mCount = 92;
+  let uCount = 0;
+  let mCount = 0;
 
   if (userCount) {
     uCount += userCount;

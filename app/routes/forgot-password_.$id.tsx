@@ -128,8 +128,9 @@ export function ErrorBoundary() {
   } else if (error instanceof Error) {
     return (
       <div className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
-        <h1>Error</h1>
-        <p>{error.message}</p>
+        Loading...
+        {/*<h1>Error</h1>
+        <p>{error.message}</p>*/}
         {/*<p>The stack trace is:</p>
         <pre>{error.stack}</pre>*/}
       </div>
