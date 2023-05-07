@@ -45,12 +45,15 @@ export async function action({ request, params }: ActionArgs) {
   }
 
   if (intent === "update") {
-    const changedCaption = formData.get("caption");
     const isPublic = formData.get("isPublic") === "on";
+    const description = formData.get("description");
+    const initialDescription = formData.get("initialDescription");
+
+    const isDescriptionUpdated = description !== initialDescription;
 
     if (
-      !changedCaption ||
-      typeof changedCaption !== "string" ||
+      !description ||
+      typeof description !== "string" ||
       typeof isPublic !== "boolean" ||
       typeof id !== "string"
     ) {
@@ -58,7 +61,7 @@ export async function action({ request, params }: ActionArgs) {
     }
 
     try {
-      await updateMeme(id, changedCaption, isPublic);
+      await updateMeme(id, description, isDescriptionUpdated, isPublic);
       return redirect(`/meme/my-collection/${id}`);
     } catch (error) {
       return json({ error: "Could not update meme caption" });
@@ -70,11 +73,9 @@ export async function action({ request, params }: ActionArgs) {
 
 function UpdateMemeForm({
   isPublic,
-  caption,
   description,
 }: {
   isPublic: boolean;
-  caption: string;
   description: string;
 }) {
   const fetcher = useFetcher();
@@ -88,35 +89,19 @@ function UpdateMemeForm({
       method='POST'
     >
       <input
-        //value={isPublic ? "on" : "off"}\
-        defaultChecked={isPublic}
+        value={description}
         readOnly
         type='hidden'
-        name='initialIsPublic'
+        name='initialDescription'
       />
-
       <div className='form-control'>
         <label className='label' htmlFor='desciption'>
-          <span className='label-text'>desciption</span>
+          <span className='label-text'>Desciption</span>
         </label>
         <textarea
           className='textarea textarea-bordered'
           defaultValue={description}
-          name='desciption'
-          data-gramm='false'
-          data-gramm_editor='false'
-          data-enable-grammarly='false'
-        />
-      </div>
-
-      <div className='form-control'>
-        <label className='label' htmlFor='caption'>
-          <span className='label-text'>Caption</span>
-        </label>
-        <textarea
-          className='textarea textarea-bordered'
-          defaultValue={caption.trim()}
-          name='caption'
+          name='description'
           data-gramm='false'
           data-gramm_editor='false'
           data-enable-grammarly='false'
@@ -142,7 +127,7 @@ function UpdateMemeForm({
           type='submit'
           disabled={isLoading}
         >
-          {isLoading ? "Loading..." : "Save"}
+          {isLoading ? "Loading..." : "Update meme"}
         </button>
       </div>
     </fetcher.Form>
@@ -177,7 +162,6 @@ export default function MemeByIdPage() {
         <img src={data.captionedImageUrl} alt='' height='500' width='500' />
         <UpdateMemeForm
           isPublic={data.meme.isPublic}
-          caption={data.meme.caption}
           description={data.meme.description}
         />
         <DeleteMemeForm />

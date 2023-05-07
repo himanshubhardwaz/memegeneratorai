@@ -18,6 +18,28 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
+async function getFunnyImageCaption(description: string) {
+  let caption = "";
+
+  try {
+    const response = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: `You are a meme generator, you have been given the image whose description is ${description}, You respond with a funny caption`,
+      temperature: 0.7,
+      max_tokens: 60,
+      top_p: 0.3,
+      frequency_penalty: 0.5,
+      presence_penalty: 0.0,
+    });
+
+    caption = response.data.choices[0].text ?? "";
+
+    return caption;
+  } catch (err) {
+    throw new Error("Something went wrong");
+  }
+}
+
 export function getCaptionedImageUrl(
   uploadedImageUrl: string,
   caption: string
@@ -27,6 +49,18 @@ export function getCaptionedImageUrl(
   const imageIdentifier = uploadedImageParts[uploadedImageParts.length - 1];
 
   let purifiedCaption = caption.replace(/[\r\n]+/gm, "").replace(/,/g, "");
+
+  //if (purifiedCaption.length >= 20) {
+  //  purifiedCaption =
+  //    purifiedCaption.substring(0, purifiedCaption.length / 2) +
+  //    " \n " +
+  //    purifiedCaption.substring(
+  //      purifiedCaption.length / 2,
+  //      purifiedCaption.length
+  //    );
+  //}
+
+  //console.log({ purifiedCaption });
 
   let captionedImageUrl = `https://res.cloudinary.com/${
     process.env.CLOUDINARY_CLOUD_NAME
@@ -87,29 +121,9 @@ export async function getImageAndUrl(
     description = result.description;
   }
 
-  // openai to get image caption
-  let caption = "";
+  const caption = await getFunnyImageCaption(description);
 
-  try {
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: `You are a meme generator, you have been given the image whose description is ${description}, You respond with a funny caption`,
-      temperature: 0.7,
-      max_tokens: 60,
-      top_p: 0.3,
-      frequency_penalty: 0.5,
-      presence_penalty: 0.0,
-    });
-
-    caption = response.data.choices[0].text ?? "";
-
-    console.log({ uploadedImageUrl, caption, description });
-
-    return { uploadedImageUrl, caption, description };
-  } catch (error) {
-    console.log("Error --->>> ", error);
-  }
-  return new Error("Something Went wrong");
+  return { uploadedImageUrl, caption, description };
 }
 
 export async function getMemeById(
@@ -157,13 +171,25 @@ export async function getPopularMemes() {
 
 export async function updateMeme(
   memeId: string,
-  newCaption: string,
+  description: string,
+  isDescriptionUpdated: boolean,
   isPublic: boolean
 ) {
+  if (!isDescriptionUpdated) {
+    const updatedMeme = await prismaClient.meme.update({
+      where: { id: memeId },
+      data: { isPublic },
+    });
+    return updatedMeme;
+  }
+
+  const caption = await getFunnyImageCaption(description);
+
   const updatedMeme = await prismaClient.meme.update({
     where: { id: memeId },
-    data: { caption: newCaption, isPublic },
+    data: { isPublic, description, caption },
   });
+
   return updatedMeme;
 }
 
