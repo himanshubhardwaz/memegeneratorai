@@ -13,7 +13,7 @@ export async function sendEmailVerificationMail({
   const msg = {
     to,
     from: "himanshu76200@gmail.com",
-    subject: "MEMEMIND email verification",
+    subject: "memegeneratorai email verification",
     text: "Click the link below to verify your email address",
     html: `<a href=${verificationUrl}>Verify Account</a>`,
   };
@@ -47,7 +47,7 @@ export async function sendForgotPasswordVerificationMail({
   const msg = {
     to,
     from: "himanshu76200@gmail.com",
-    subject: "MEMEMIND email verification",
+    subject: "memegeneratorai email verification",
     text: "Click the link below to verify your email address",
     html: `<a href=${verificationUrl}>Verify Account</a>`,
   };

@@ -4,7 +4,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { getUserAndMemeCount } from "~/utils/user-services.server";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "Mememind Homepage" }];
+  return [{ title: "memegeneratorai Homepage" }];
 };
 
 export async function loader() {

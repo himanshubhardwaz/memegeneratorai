@@ -4,7 +4,7 @@ import { getSession, destroySession, requireUserSession } from "~/sessions";
 import { Form, Link } from "@remix-run/react";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "Mememind logout" }];
+  return [{ title: "memegeneratorai logout" }];
 };
 
 export const loader = async ({ request }: LoaderArgs) => {

@@ -20,7 +20,7 @@ import { useState } from "react";
 import { sendEmailVerificationMail } from "~/utils/send-verification-mail.server";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "Mememind create meme" }];
+  return [{ title: "memegeneratorai create meme" }];
 };
 
 type actionData = TypedResponse<{

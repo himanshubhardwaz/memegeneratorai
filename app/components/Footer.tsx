@@ -11,7 +11,7 @@ export default function Footer() {
           width='40'
           className='rounded-full mr-2'
         />
-        <span className='normal-case text-xl'>memeMind</span>
+        <span className='normal-case text-xl'>memegeneratorai.online</span>
         <p>Copyright © 2023 - All right reserved</p>
       </div>
       <div className='grid-flow-col gap-4 md:place-self-center md:justify-self-end'>

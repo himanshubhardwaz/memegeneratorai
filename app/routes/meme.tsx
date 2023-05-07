@@ -4,7 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import { getPublicMemes } from "~/utils/meme-services.server";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "Mememind popular memes" }];
+  return [{ title: "memegeneratorai popular memes" }];
 };
 
 export async function loader() {

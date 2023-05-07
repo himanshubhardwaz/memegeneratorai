@@ -12,7 +12,7 @@ import { getSession, commitSession } from "~/sessions";
 import { sendForgotPasswordVerificationMail } from "~/utils/send-verification-mail.server";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "Mememind forgot password page" }];
+  return [{ title: "memegeneratorai forgot password page" }];
 };
 
 export async function loader({ request }: LoaderArgs) {

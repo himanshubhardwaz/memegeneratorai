@@ -9,7 +9,7 @@ import { sendEmailVerificationMail } from "~/utils/send-verification-mail.server
 import { getSession, commitSession } from "~/sessions";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "Mememind login" }];
+  return [{ title: "memegeneratorai login" }];
 };
 
 export async function loader({ request }: LoaderArgs) {
@@ -91,7 +91,7 @@ export default function SignupPage() {
       <div className='card bg-base-100 md:w-96 shadow-xl w-full'>
         <div className='card-body'>
           <p className='font-semibold text-lg text-center mb-6'>
-            Create your memeMind account
+            Create your memegeneratorai account
           </p>
           {error && (
             <div className='alert alert-error shadow-lg w-full max-w-sm'>

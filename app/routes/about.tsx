@@ -2,7 +2,7 @@ import type { V2_MetaFunction } from "@remix-run/react";
 import { Link } from "@remix-run/react";
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "Mememind about page" }];
+  return [{ title: "memegeneratorai about page" }];
 };
 
 export default function AboutPage() {
@@ -10,7 +10,7 @@ export default function AboutPage() {
     <main className='flex min-h-[calc(100vh-8rem)] flex-col items-center p-8 gap-8 justify-center'>
       <div className='max-w-3xl'>
         <h1 className='text-2xl mb-10 leading-7 text-center underline'>
-          About Mememind
+          About memegeneratorai
         </h1>
         <p className='text-xl leading-7 text-justify mb-10'>
           Welcome to our website, where creativity meets technology! We are
