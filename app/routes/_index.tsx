@@ -21,7 +21,11 @@ export async function loader() {
     mCount += memeCount;
   }
 
-  return json({ userCount: uCount, memeCount: mCount });
+  const data = { userCount: uCount, memeCount: mCount };
+
+  return json(data, {
+    headers: { "Cache-Control": "public, s-maxage=600" },
+  });
 }
 
 export default function Index() {
