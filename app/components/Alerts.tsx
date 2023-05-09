@@ -21,16 +21,20 @@ export default function Alerts({
   else if (errorAlert) closeAlertAction = "close-error-alert";
   else if (infoAlert) closeAlertAction = "close-info-alert";
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      fetcher.submit(
-        { intent: closeAlertAction },
-        { method: "POST", action: "/" }
-      );
-    }, 4000);
+  const isAlertActive = successAlert || errorAlert || infoAlert;
 
-    return () => clearTimeout(timeout);
-  }, [closeAlertAction, fetcher]);
+  useEffect(() => {
+    if (isAlertActive) {
+      const timeout = setTimeout(() => {
+        fetcher.submit(
+          { intent: closeAlertAction },
+          { method: "POST", action: "/" }
+        );
+      }, 4000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [closeAlertAction, fetcher, isAlertActive]);
 
   if (isLoading) return null;
 
