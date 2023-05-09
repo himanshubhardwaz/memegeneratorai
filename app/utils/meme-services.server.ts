@@ -24,7 +24,7 @@ async function getFunnyImageCaption(description: string) {
   try {
     const response = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `You are a meme generator, you have been given the image whose description is ${description}, You respond with a funny caption`,
+      prompt: `You are a meme generator, you have been given an image whose description is "${description}", You respond with a funny caption`,
       temperature: 0.7,
       max_tokens: 60,
       top_p: 0.3,

@@ -1,4 +1,5 @@
 import { useFetcher } from "@remix-run/react";
+import { useEffect } from "react";
 
 export default function Alerts({
   successAlert,
@@ -13,6 +14,23 @@ export default function Alerts({
 
   const isLoading =
     fetcher.state === "loading" || fetcher.state === "submitting";
+
+  let closeAlertAction = "";
+
+  if (successAlert) closeAlertAction = "close-success-alert";
+  else if (errorAlert) closeAlertAction = "close-error-alert";
+  else if (infoAlert) closeAlertAction = "close-info-alert";
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      fetcher.submit(
+        { intent: closeAlertAction },
+        { method: "POST", action: "/" }
+      );
+    }, 4000);
+
+    return () => clearTimeout(timeout);
+  }, [closeAlertAction, fetcher]);
 
   if (isLoading) return null;
 
