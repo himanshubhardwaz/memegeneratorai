@@ -117,7 +117,7 @@ export async function getImageAndUrl(
 
   if (!description) {
     const res = await fetch(
-      `https://flask-production-fd24.up.railway.app?image=${uploadedImageUrl}`
+      `${process.env.IMAGE_RECOGNITION_MODEL_URL}?image=${uploadedImageUrl}`
     );
 
     const result = await res.json();
