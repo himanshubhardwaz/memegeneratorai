@@ -2,7 +2,7 @@
 
 ## Demo
 
-[<img width="50%" alt="Screenshot 2023-05-12 at 4 39 57 PM" src="https://github.com/himanshubhardwaz/memegeneratorai/assets/62508572/8de522a4-6c67-4e5a-8b82-85c2b4ae3d7f">](https://ik.imagekit.io/q1caodkhg/Screen_Recording_2023-05-07_at_4.55.33_PM.mov?updatedAt=1683458888413)
+[<img width="50%" alt="Screenshot 2023-05-12 at 4 39 57 PM" src="https://github.com/himanshubhardwaz/memegeneratorai/assets/62508572/8de522a4-6c67-4e5a-8b82-85c2b4ae3d7f">](https://youtu.be/r9NQJfwet8I, "DEMO")
 
 ## Overview
 
