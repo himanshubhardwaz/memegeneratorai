@@ -14,6 +14,7 @@ import {
 } from "@remix-run/react";
 import { commitSession, requireUserSession } from "~/sessions";
 import CaptionedImage from "~/components/CaptionedImage";
+import { useEffect, useRef } from "react";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Edit meme" }];
@@ -62,6 +63,9 @@ export async function action({ request, params }: ActionArgs) {
     const isPublic = formData.get("isPublic") === "on";
     const description = formData.get("description");
     const initialDescription = formData.get("initialDescription");
+    const isAIDescriptionEnabled =
+      formData.get("isAIDescriptionEnabled") === "on";
+    const url = formData.get("url");
 
     const isDescriptionUpdated = description !== initialDescription;
 
@@ -69,7 +73,9 @@ export async function action({ request, params }: ActionArgs) {
       !description ||
       typeof description !== "string" ||
       typeof isPublic !== "boolean" ||
-      typeof id !== "string"
+      typeof id !== "string" ||
+      typeof isAIDescriptionEnabled !== "boolean" ||
+      typeof url !== "string"
     ) {
       return json({ error: "Invalid data type" });
     }
@@ -79,14 +85,23 @@ export async function action({ request, params }: ActionArgs) {
         id,
         description,
         isDescriptionUpdated,
-        isPublic
+        isPublic,
+        isAIDescriptionEnabled,
+        url
       );
       if (updatedMeme) session.set("successAlert", "Successfully updated meme");
-      return redirect(`/meme/my-collection/${id}`, {
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      });
+      const captionedImageUrl = getCaptionedImageUrl(
+        updatedMeme.url,
+        updatedMeme.caption
+      );
+      return json(
+        { meme: updatedMeme, captionedImageUrl },
+        {
+          headers: {
+            "Set-Cookie": await commitSession(session),
+          },
+        }
+      );
     } catch (error) {
       return json({ error: "Could not update meme caption" });
     }
@@ -95,22 +110,31 @@ export async function action({ request, params }: ActionArgs) {
   return new Error("Unknow intent type");
 }
 
-function UpdateMemeForm({
-  isPublic,
-  description,
-}: {
-  isPublic: boolean;
-  description: string;
-}) {
-  const fetcher = useFetcher();
+function UpdateMemeForm() {
+  const fetcher = useFetcher<typeof loader>();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const data = useLoaderData<typeof loader>() || {};
+  const isPublic = data.meme.isPublic;
+  const description = data.meme.description;
+  const url = data.meme.url;
 
   const isLoading =
     fetcher.state === "loading" || fetcher.state === "submitting";
+
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data) {
+      if (formRef.current) {
+        formRef.current.description.value = fetcher.data.meme.description;
+      }
+    }
+  }, [fetcher.data, fetcher.state]);
 
   return (
     <fetcher.Form
       className='flex-shrink-0 w-full max-w-sm bg-base-100'
       method='POST'
+      ref={formRef}
     >
       <input
         value={description}
@@ -118,13 +142,16 @@ function UpdateMemeForm({
         type='hidden'
         name='initialDescription'
       />
+      <input value={url} readOnly type='hidden' name='url' />
       <div className='form-control'>
         <label className='label' htmlFor='desciption'>
           <span className='label-text'>Desciption</span>
         </label>
         <textarea
           className='textarea textarea-bordered'
-          defaultValue={description}
+          defaultValue={
+            fetcher.data ? fetcher.data.meme.description : description
+          }
           name='description'
           data-gramm='false'
           data-gramm_editor='false'
@@ -141,6 +168,18 @@ function UpdateMemeForm({
           defaultChecked={isPublic}
           className='checkbox'
           name='isPublic'
+        />
+      </div>
+
+      <div className='flex items-center gap-2 mt-6'>
+        <label className='label' htmlFor='isAIDescriptionEnabled'>
+          <span>Let AI generate desscription: </span>
+        </label>
+        <input
+          type='checkbox'
+          defaultChecked={false}
+          className='checkbox'
+          name='isAIDescriptionEnabled'
         />
       </div>
 
@@ -191,8 +230,9 @@ export default function MemeByIdPage() {
           isPublic={data?.meme?.isPublic}
         />
         <UpdateMemeForm
-          isPublic={data.meme.isPublic}
-          description={data.meme.description}
+        //isPublic={data.meme.isPublic}
+        //description={data.meme.description}
+        //url={data?.meme?.url}
         />
         <DeleteMemeForm />
       </div>
