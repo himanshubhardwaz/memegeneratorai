@@ -1,8 +1,10 @@
 # [Meme Generator App](https://memegeneratorai.online)
 
 ## Demo
+https://github.com/himanshubhardwaz/memegeneratorai/assets/62508572/06b0db24-272b-4567-8c26-a8ac3a1855dc
 
-[<img width="50%" alt="Screenshot 2023-05-12 at 4 39 57 PM" src="https://github.com/himanshubhardwaz/memegeneratorai/assets/62508572/8de522a4-6c67-4e5a-8b82-85c2b4ae3d7f">](https://youtu.be/r9NQJfwet8I, "DEMO")
+
+
 
 ## Overview
 
