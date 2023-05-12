@@ -13,6 +13,7 @@ import {
   useFetcher,
 } from "@remix-run/react";
 import { commitSession, requireUserSession } from "~/sessions";
+import CaptionedImage from "~/components/CaptionedImage";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Edit meme" }];
@@ -142,6 +143,7 @@ function UpdateMemeForm({
           name='isPublic'
         />
       </div>
+
       <div className='form-control mt-6'>
         <button
           className='btn btn-primary'
@@ -182,7 +184,12 @@ export default function MemeByIdPage() {
   return (
     <>
       <div className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>
-        <img src={data.captionedImageUrl} alt='' height='500' width='500' />
+        <CaptionedImage
+          url={data?.meme?.url}
+          caption={data?.meme?.caption}
+          id={data?.meme?.id}
+          isPublic={data?.meme?.isPublic}
+        />
         <UpdateMemeForm
           isPublic={data.meme.isPublic}
           description={data.meme.description}

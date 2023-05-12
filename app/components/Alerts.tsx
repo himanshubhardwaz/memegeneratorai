@@ -15,11 +15,11 @@ export default function Alerts({
   const isLoading =
     fetcher.state === "loading" || fetcher.state === "submitting";
 
-  let closeAlertAction = "";
+  let closeAlertIntent = "";
 
-  if (successAlert) closeAlertAction = "close-success-alert";
-  else if (errorAlert) closeAlertAction = "close-error-alert";
-  else if (infoAlert) closeAlertAction = "close-info-alert";
+  if (successAlert) closeAlertIntent = "close-success-alert";
+  else if (errorAlert) closeAlertIntent = "close-error-alert";
+  else if (infoAlert) closeAlertIntent = "close-info-alert";
 
   const isAlertActive = successAlert || errorAlert || infoAlert;
 
@@ -27,15 +27,16 @@ export default function Alerts({
     if (isAlertActive) {
       const timeout = setTimeout(() => {
         fetcher.submit(
-          { intent: closeAlertAction },
+          { intent: closeAlertIntent },
           { method: "POST", action: "/" }
         );
       }, 4000);
 
       return () => clearTimeout(timeout);
     }
-  }, [closeAlertAction, fetcher, isAlertActive]);
+  }, [closeAlertIntent, fetcher, isAlertActive]);
 
+  // optimistically closing alert when loading
   if (isLoading) return null;
 
   if (successAlert) {

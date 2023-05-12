@@ -7,7 +7,6 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function Layout({
   userId,
   name,
-  isEmailVerified,
 }: {
   userId: string;
   name: string;
@@ -16,7 +15,7 @@ export default function Layout({
   const outlet = useOutlet();
 
   return (
-    <div>
+    <>
       <Navbar userId={userId} name={name} />
       <AnimatePresence mode='wait' initial={false}>
         <motion.main
@@ -30,6 +29,6 @@ export default function Layout({
         </motion.main>
       </AnimatePresence>
       <Footer />
-    </div>
+    </>
   );
 }
