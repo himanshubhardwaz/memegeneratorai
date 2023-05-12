@@ -19,6 +19,14 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
+async function getImageDescription(uploadedImageUrl: string) {
+  const response = await fetch(
+    `${process.env.IMAGE_RECOGNITION_MODEL_URL}?image=${uploadedImageUrl}`
+  );
+  const data = await response.json();
+  return data.description;
+}
+
 async function getFunnyImageCaption(description: string) {
   let caption = "";
 
@@ -114,12 +122,7 @@ export async function getImageAndUrl(
   let description = userDescription;
 
   if (!description) {
-    const res = await fetch(
-      `${process.env.IMAGE_RECOGNITION_MODEL_URL}?image=${uploadedImageUrl}`
-    );
-
-    const result = await res.json();
-    description = result.description;
+    description = await getImageDescription(uploadedImageUrl);
   }
 
   const caption = await getFunnyImageCaption(description);
@@ -175,17 +178,28 @@ export async function getPopularMemes() {
 
 export async function updateMeme(
   memeId: string,
-  description: string,
+  userDescription: string,
   isDescriptionUpdated: boolean,
-  isPublic: boolean
+  isPublic: boolean,
+  isAIDescriptionEnabled: boolean,
+  memeUrl: string
 ) {
-  if (!isDescriptionUpdated) {
+  if (!isDescriptionUpdated && !isAIDescriptionEnabled) {
     const updatedMeme = await prismaClient.meme.update({
       where: { id: memeId },
       data: { isPublic },
     });
     return updatedMeme;
   }
+
+  // descrition of the image provided by user
+  let description = userDescription;
+
+  if (isAIDescriptionEnabled) {
+    description = await getImageDescription(memeUrl);
+  }
+
+  console.log({ description });
 
   const caption = await getFunnyImageCaption(description);
 
