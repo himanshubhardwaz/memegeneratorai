@@ -89,7 +89,7 @@ export default function CaptionedImage({
     <>
       <canvas ref={canvasRef} width={350} height={350} className='border-2' />
       {shareLinkCopied && (
-        <div className='alert alert-info shadow-lg mt-2'>
+        <div className='alert alert-info shadow-lg mt-2 max-w-[350px]'>
           <div>
             <svg
               xmlns='http://www.w3.org/2000/svg'
