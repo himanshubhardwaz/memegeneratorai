@@ -1,34 +1,75 @@
-# Welcome to Remix!
+# [Meme Generator App](https://memegeneratorai.online)
 
-- [Remix Docs](https://remix.run/docs)
+## Overview
 
-## Deployment
+This app is a meme generator that uses AI-powered image captioning to generate funny captions for your images. It is built using the Remix.run framework, TypeScript, Prisma, Tailwind, [NLPConnect/ViT-GPT2-Image-Captioning model](https://huggingface.co/nlpconnect/vit-gpt2-image-captioning), OpenAI, and Cloudinary.
 
-After having run the `create-remix` command and selected "Vercel" as a deployment target, you only need to [import your Git repository](https://vercel.com/new) into Vercel, and it will be deployed.
+## Features
 
-If you'd like to avoid using a Git repository, you can also deploy the directory by running [Vercel CLI](https://vercel.com/cli):
+- Generates funny captions for your images using AI-powered image captioning
+- Integrates with OpenAI to prompt the meme generator with an image description
+- Uses Cloudinary's image transformation to add the caption on the image
+- Built using Remix.run framework, TypeScript, Prisma, and Tailwind for efficient and scalable development
 
-```sh
-npm i -g vercel
-vercel
+## Setup
+
+1. Clone the repository:
+
+```
+git clone https://github.com/[username]/meme-generator-app.git
 ```
 
-It is generally recommended to use a Git repository, because future commits will then automatically be deployed by Vercel, through its [Git Integration](https://vercel.com/docs/concepts/git).
+2. Install dependencies:
 
-## Development
-
-To run your Remix app locally, make sure your project's local dependencies are installed:
-
-```sh
+```
+cd meme-generator-app
 npm install
 ```
 
-Afterwards, start the Remix development server like so:
+3. Create a `.env` file with the following environment variables:
 
-```sh
-npm run dev
+```
+CLOUDINARY_URL=[your Cloudinary URL]
+OPENAI_API_KEY=[your OpenAI API key]
+COULDINARY_SECRET=[your cloudinary secret]
+COULDINARY_API_KEY=[your cloudinary API key]
+CLOUDINARY_CLOUD_NAME=[your clodinary cloud name]
+OPENAI_API_KEY=[your openai key]
+SENDGRID_API_KEY=[your sendgrid api key]
+DATABASE_URL=[your db url]
+SESSION_SECRET=[any random string]
+BASE_URL='http://localhost:3000'
+IMAGE_RECOGNITION_MODEL_URL=[run the model locally (use flask)]
 ```
 
-Open up [http://localhost:3000](http://localhost:3000) and you should be ready to go!
+4. Run the Prisma migration:
 
-If you're used to using the `vercel dev` command provided by [Vercel CLI](https://vercel.com/cli) instead, you can also use that, but it's not needed.
+```
+npx prisma migrate dev
+```
+
+5. Start the app:
+
+```
+npm start
+```
+
+## Usage
+
+1. Upload an image to the app
+2. The app will use NLPConnect/ViT-GPT2-Image-Captioning model to generate a description of the image
+3. The app will prompt OpenAI with the image description and ask for a funny caption
+4. OpenAI will generate a funny caption and the app will use Cloudinary's image transformation to add the caption on the image
+5. Download or share your funny meme!
+
+## What's Next
+
+Currently, the app relies on Cloudinary for image transformation and storage, which may not be ideal for all use cases. In the future, we plan to remove this dependency and instead add the caption to the image directly in the browser using JavaScript canvas rendering. This approach would allow us to not save any images, providing better privacy and security for our users. Stay tuned for updates!
+
+## Contributing
+
+Contributions are welcome! Please create a pull request with your changes.
+
+## License
+
+This app is licensed under the [MIT license](https://opensource.org/licenses/MIT).
