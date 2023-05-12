@@ -54,21 +54,21 @@ export default function CaptionedImage({
         const img = new Image();
 
         const onLoadCallback = () => {
-          ctx.drawImage(img, 0, 0, 500, 500);
+          ctx.drawImage(img, 0, 0, 350, 350);
           ctx.font = "bold 25px Arial";
           ctx.fillStyle = "white";
           ctx.textAlign = "left";
 
           const measuredTextWidth = ctx.measureText(caption).width;
           const maxTextLength =
-            caption.length / Math.ceil(measuredTextWidth / 490);
+            caption.length / Math.ceil(measuredTextWidth / 340);
           const textSplits = splitEveryN(caption, maxTextLength);
           const measuredSplitTextWidth = ctx.measureText(textSplits[0]).width;
-          const xMargin = (490 - measuredSplitTextWidth) / 2;
-          const yStartingHeight = 480 - textSplits.length * 14;
+          const xMargin = (340 - measuredSplitTextWidth) / 2;
+          const yStartingHeight = 325 - textSplits.length * 14;
 
           textSplits.forEach((textSplit, index) => {
-            ctx.fillText(textSplit, xMargin, yStartingHeight + index * 30, 490);
+            ctx.fillText(textSplit, xMargin, yStartingHeight + index * 30, 290);
           });
         };
 
@@ -87,9 +87,9 @@ export default function CaptionedImage({
 
   return (
     <>
-      <canvas ref={canvasRef} width={500} height={500} className='border-4' />
+      <canvas ref={canvasRef} width={350} height={350} className='border-2' />
       {shareLinkCopied && (
-        <div className='alert alert-info shadow-lg max-w-[500px]'>
+        <div className='alert alert-info shadow-lg mt-2 max-w-[350px]'>
           <div>
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -115,8 +115,8 @@ export default function CaptionedImage({
           </div>
         </div>
       )}
-      <div className='flex gap-8'>
-        <div className='tooltip cursor-pointer' data-tip='Download'>
+      <div className='flex gap-8 items-center justify-center mt-2'>
+        <div className='tooltip cursor-pointer' data-tip='Download Meme'>
           <svg
             onClick={downloadMeme}
             xmlns='http://www.w3.org/2000/svg'

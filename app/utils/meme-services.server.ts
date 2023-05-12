@@ -136,6 +136,8 @@ export async function getMemeById(
 
   const { isPublic, userId } = meme;
 
+  console.log({ isPublic, userId });
+
   const session = await getSession(request.headers.get("Cookie"));
 
   if (!isPublic) {
