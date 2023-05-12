@@ -4,6 +4,7 @@ import { requireUserSession, getSession } from "~/sessions";
 import { prismaClient } from "~/utils/prisma-client.server";
 import type { RequestArg } from "~/sessions";
 import type { Meme } from "@prisma/client";
+import { getPurifiedImageCaption } from "~/utils";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -48,10 +49,7 @@ export function getCaptionedImageUrl(
 
   const imageIdentifier = uploadedImageParts[uploadedImageParts.length - 1];
 
-  let purifiedCaption = caption
-    .replace(/[\r\n]+/gm, "")
-    .replace(/,/g, "")
-    .replace(/"/g, "");
+  let purifiedCaption = getPurifiedImageCaption(caption);
 
   //if (purifiedCaption.length >= 20) {
   //  purifiedCaption =

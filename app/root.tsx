@@ -19,6 +19,7 @@ export const links: LinksFunction = () => [
 ];
 
 export async function loader({ request }: LoaderArgs) {
+  const BASE_URL = process.env.BASE_URL;
   const session = await getSession(request.headers.get("Cookie"));
   const name = session.get("name");
   const userId = session.get("userId");
@@ -35,13 +36,14 @@ export async function loader({ request }: LoaderArgs) {
     successAlert,
     errorAlert,
     infoAlert,
+    ENV: { BASE_URL },
   });
 }
 
 export async function action({ request }: ActionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-
   const formData = await request.formData();
+
   const intent = formData.get("intent");
 
   if (intent === "close-success-alert") {
@@ -110,6 +112,12 @@ export default function App() {
           infoAlert={infoAlert}
           errorAlert={errorAlert}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.process = ${JSON.stringify({ env: data.ENV })}`,
+          }}
+        />
+        <Scripts />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

@@ -9,6 +9,7 @@ import {
   useRouteError,
   useLoaderData,
 } from "@remix-run/react";
+import CaptionedImage from "~/components/CaptionedImage";
 
 export async function loader({ request, params }: LoaderArgs) {
   const id = params.id;
@@ -29,7 +30,12 @@ export default function MemeByIdPage() {
   const data = useLoaderData<typeof loader>() || {};
   return (
     <div className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>
-      <img src={data.captionedImageUrl} alt='' height='500' width='500' />
+      <CaptionedImage
+        url={data?.meme?.url}
+        caption={data?.meme?.caption}
+        id={data?.meme?.id}
+        isPublic={data?.meme?.isPublic}
+      />
     </div>
   );
 }
