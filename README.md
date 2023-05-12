@@ -2,6 +2,10 @@
 
 ## Demo
 
+[![App demonstration]          // Title!
+(https://github.com/himanshubhardwaz/memegeneratorai/assets/62508572/a523ca3d-54e1-4275-a1ba-9818ea994fab)] // Thumbnail
+(https://ik.imagekit.io/q1caodkhg/Screen_Recording_2023-05-07_at_4.55.33_PM.mov?updatedAt=1683458888413) "App demonstration")    // Video Link
+
 https://ik.imagekit.io/q1caodkhg/Screen_Recording_2023-05-07_at_4.55.33_PM.mov?updatedAt=1683458888413
 
 ## Overview
