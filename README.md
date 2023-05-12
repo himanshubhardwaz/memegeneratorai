@@ -1,5 +1,9 @@
 # [Meme Generator App](https://memegeneratorai.online)
 
+## Demo
+
+https://ik.imagekit.io/q1caodkhg/Screen_Recording_2023-05-07_at_4.55.33_PM.mov?updatedAt=1683458888413
+
 ## Overview
 
 This app is a meme generator that uses AI-powered image captioning to generate funny captions for your images. It is built using the Remix.run framework, TypeScript, Prisma, Tailwind, [NLPConnect/ViT-GPT2-Image-Captioning model](https://huggingface.co/nlpconnect/vit-gpt2-image-captioning), OpenAI, and Cloudinary.
