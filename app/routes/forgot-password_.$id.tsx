@@ -46,8 +46,6 @@ export async function action({ request }: ActionArgs) {
   const userId = formData.get("userId");
   const password = formData.get("password");
 
-  console.log({ userId, password });
-
   const session = await getSession();
 
   if (
@@ -63,7 +61,6 @@ export async function action({ request }: ActionArgs) {
 
   session.set("successAlert", "Successfully updated password");
 
-  // Login succeeded, send them to the home page.
   return redirect("/login", {
     headers: {
       "Set-Cookie": await commitSession(session),
@@ -78,29 +75,29 @@ export default function VerifyEmailPage() {
   const isLoading = navigation.state === "submitting";
 
   return (
-    <main className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>
-      <div className='card bg-base-100 md:w-96 shadow-xl w-full'>
-        <div className='card-body'>
+    <main className="flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8">
+      <div className="card bg-base-100 md:w-96 shadow-xl w-full">
+        <div className="card-body">
           <Form
-            className='flex-shrink-0 w-full max-w-sm bg-base-100'
-            method='POST'
+            className="flex-shrink-0 w-full max-w-sm bg-base-100"
+            method="POST"
           >
-            <input value={userId} name='userId' type='hidden' />
-            <div className='form-control'>
-              <label className='label' htmlFor='password'>
-                <span className='label-text'>Password</span>
+            <input value={userId} name="userId" type="hidden" />
+            <div className="form-control">
+              <label className="label" htmlFor="password">
+                <span className="label-text">Password</span>
               </label>
               <input
-                type='password'
-                name='password'
+                type="password"
+                name="password"
                 required
-                className='file-input w-full max-w-sm file-input-bordered'
+                className="file-input w-full max-w-sm file-input-bordered"
               />
             </div>
-            <div className='form-control mt-6'>
+            <div className="form-control mt-6">
               <button
-                className='btn btn-primary w-full max-w-sm'
-                type='submit'
+                className="btn btn-primary w-full max-w-sm"
+                type="submit"
                 disabled={isLoading}
               >
                 {isLoading ? "Loading..." : "Change Password"}
@@ -118,7 +115,7 @@ export function ErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     return (
-      <div className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8">
         <h1>
           {error.status} {error.statusText}
         </h1>
@@ -127,7 +124,7 @@ export function ErrorBoundary() {
     );
   } else if (error instanceof Error) {
     return (
-      <div className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8">
         Loading...
         {/*<h1>Error</h1>
         <p>{error.message}</p>*/}
@@ -137,7 +134,7 @@ export function ErrorBoundary() {
     );
   } else {
     return (
-      <h1 className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
+      <h1 className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8">
         Unknown Error
       </h1>
     );
