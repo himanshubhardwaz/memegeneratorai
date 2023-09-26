@@ -5,6 +5,7 @@ import { prismaClient } from "~/utils/prisma-client.server";
 import type { RequestArg } from "~/sessions";
 import type { Meme } from "@prisma/client";
 import { getPurifiedImageCaption } from "~/utils";
+import { getImageCaption } from "./caption-service.server";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -20,11 +21,8 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 async function getImageDescription(uploadedImageUrl: string) {
-  const response = await fetch(
-    `${process.env.IMAGE_RECOGNITION_MODEL_URL}?image=${uploadedImageUrl}`
-  );
-  const data = await response.json();
-  return data.description;
+  const response = await getImageCaption(uploadedImageUrl);
+  return response.captionResult.text;
 }
 
 async function getFunnyImageCaption(description: string) {
@@ -58,18 +56,6 @@ export function getCaptionedImageUrl(
   const imageIdentifier = uploadedImageParts[uploadedImageParts.length - 1];
 
   let purifiedCaption = getPurifiedImageCaption(caption);
-
-  //if (purifiedCaption.length >= 20) {
-  //  purifiedCaption =
-  //    purifiedCaption.substring(0, purifiedCaption.length / 2) +
-  //    " \n " +
-  //    purifiedCaption.substring(
-  //      purifiedCaption.length / 2,
-  //      purifiedCaption.length
-  //    );
-  //}
-
-  //console.log({ purifiedCaption });
 
   let captionedImageUrl = `https://res.cloudinary.com/${
     process.env.CLOUDINARY_CLOUD_NAME
@@ -138,8 +124,6 @@ export async function getMemeById(
   if (!meme) throw new Error("Could not find meme");
 
   const { isPublic, userId } = meme;
-
-  console.log({ isPublic, userId });
 
   const session = await getSession(request.headers.get("Cookie"));
 
@@ -226,21 +210,3 @@ export async function getPublicMemes() {
     ],
   });
 }
-
-//export async function toggleMemeLike(
-//  memeId: string,
-//  userId: string,
-//  like: boolean
-//) {
-//  if (like) {
-//    const likedMeme = await prismaClient.likes.findMany({
-//      where: { memeId, userId },
-//    });
-
-//    if (likedMeme) return likedMeme;
-
-//    else return await prismaClient.likes.create({
-
-//    })
-//  }
-//}
