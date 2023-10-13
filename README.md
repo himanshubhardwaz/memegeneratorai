@@ -62,12 +62,12 @@ To run MemeGeneratorAI locally or deploy it, follow these steps:
 
 1. **Clone the Repository:**
    ```
-   git clone https://github.com/yourusername/MemeGeneratorAI.git
+   git clone https://github.com/himanshubhardwaz/memegeneratorai.git
    ```
 
 2. **Install Dependencies:**
    ```
-   cd MemeGeneratorAI
+   cd memegeneratorai
    npm install
    ```
 
