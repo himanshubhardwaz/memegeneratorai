@@ -20,6 +20,7 @@ export const links: LinksFunction = () => [
 
 export async function loader({ request }: LoaderArgs) {
   const BASE_URL = process.env.BASE_URL;
+  const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
   const session = await getSession(request.headers.get("Cookie"));
   const name = session.get("name");
   const userId = session.get("userId");
@@ -36,7 +37,7 @@ export async function loader({ request }: LoaderArgs) {
     successAlert,
     errorAlert,
     infoAlert,
-    ENV: { BASE_URL },
+    ENV: { BASE_URL, CLOUDINARY_CLOUD_NAME },
   });
 }
 
@@ -73,39 +74,39 @@ export default function App() {
   const infoAlert = data?.infoAlert;
 
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
-        <meta charSet='utf-8' />
-        <meta name='viewport' content='width=device-width,initial-scale=1' />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link
-          rel='apple-touch-icon'
-          sizes='180x180'
-          href='/favicons/apple-touch-icon.png'
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/favicons/apple-touch-icon.png"
         />
         <link
-          rel='icon'
-          type='image/png'
-          sizes='32x32'
-          href='/favicons/favicon-32x32.png'
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicons/favicon-32x32.png"
         />
         <link
-          rel='icon'
-          type='image/png'
-          sizes='16x16'
-          href='/favicons/favicon-16x16.png'
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicons/favicon-16x16.png"
         />
-        <link rel='manifest' href='/favicons/site.webmanifest' />
+        <link rel="manifest" href="/favicons/site.webmanifest" />
         <link
-          rel='mask-icon'
-          href='/favicons/safari-pinned-tab.svg'
-          color='#5bbad5'
+          rel="mask-icon"
+          href="/favicons/safari-pinned-tab.svg"
+          color="#5bbad5"
         />
-        <meta name='msapplication-TileColor' content='#da532c' />
-        <meta name='theme-color' content='#ffffff' />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff" />
         <Meta />
         <Links />
       </head>
-      <body className='no-scrollbar'>
+      <body className="no-scrollbar">
         <Layout userId={userId} name={name} isEmailVerified={isEmailVerified} />
         <Alerts
           successAlert={successAlert}
