@@ -15,6 +15,10 @@ const cld = new Cloudinary({
   },
 });
 
+function removeQuotes(str: string) {
+  return str.replace(/['"]+/g, "");
+}
+
 function getImageNameFromUrl(url: string) {
   const parts = url.split("/");
   const lastPart = parts[parts.length - 1];
@@ -32,7 +36,10 @@ export default function CloudinaryCaptionedImage(props: CaptionedImageProps) {
     .resize(scale().width(350).height(350))
     .overlay(
       source(
-        text(props.caption, new TextStyle("arial", 24).fontWeight("bold"))
+        text(
+          removeQuotes(props.caption),
+          new TextStyle("arial", 24).fontWeight("bold")
+        )
           .textColor("black")
           .textFit(new TextFitQualifier(320))
       ).position(new Position().gravity(compass("south")).offsetY(20))
