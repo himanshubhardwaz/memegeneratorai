@@ -26,8 +26,6 @@ async function getImageDescription(uploadedImageUrl: string) {
 }
 
 async function getFunnyImageCaption(description: string) {
-  let caption = "";
-
   try {
     const response = await openai.createCompletion({
       model: "text-davinci-003",
@@ -39,7 +37,7 @@ async function getFunnyImageCaption(description: string) {
       presence_penalty: 0.0,
     });
 
-    caption = response.data.choices[0].text ?? "";
+    const caption = response.data.choices[0].text ?? "";
 
     return caption;
   } catch (err) {
