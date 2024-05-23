@@ -15,6 +15,7 @@ import {
 import { commitSession, requireUserSession } from "~/sessions";
 import CaptionedImage from "~/components/CaptionedImage";
 import { useEffect, useRef } from "react";
+import { Alerts } from "~/contants/alerts";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Edit meme" }];
@@ -51,7 +52,7 @@ export async function action({ request, params }: ActionArgs) {
 
   if (intent === "delete" && typeof id === "string") {
     await deleteMeme(id);
-    session.set("successAlert", "Successfully deleted meme");
+    session.set(Alerts.SUCCESS, "Successfully deleted meme");
     return redirect(`/meme/my-collection`, {
       headers: {
         "Set-Cookie": await commitSession(session),
@@ -89,7 +90,7 @@ export async function action({ request, params }: ActionArgs) {
         isAIDescriptionEnabled,
         url
       );
-      if (updatedMeme) session.set("successAlert", "Successfully updated meme");
+      if (updatedMeme) session.set(Alerts.SUCCESS, "Successfully updated meme");
       const captionedImageUrl = getCaptionedImageUrl(
         updatedMeme.url,
         updatedMeme.caption
@@ -103,7 +104,10 @@ export async function action({ request, params }: ActionArgs) {
         }
       );
     } catch (error) {
-      return json({ error: "Could not update meme caption" });
+      if (error instanceof Error) return json({ error: error.message });
+      return json({
+        error: "Something went wrong, Cannot update meme caption!",
+      });
     }
   }
 
@@ -132,63 +136,63 @@ function UpdateMemeForm() {
 
   return (
     <fetcher.Form
-      className='flex-shrink-0 w-full max-w-sm bg-base-100'
-      method='POST'
+      className="flex-shrink-0 w-full max-w-sm bg-base-100"
+      method="POST"
       ref={formRef}
     >
       <input
         value={description}
         readOnly
-        type='hidden'
-        name='initialDescription'
+        type="hidden"
+        name="initialDescription"
       />
-      <input value={url} readOnly type='hidden' name='url' />
-      <div className='form-control'>
-        <label className='label' htmlFor='desciption'>
-          <span className='label-text'>Desciption</span>
+      <input value={url} readOnly type="hidden" name="url" />
+      <div className="form-control">
+        <label className="label" htmlFor="desciption">
+          <span className="label-text">Desciption</span>
         </label>
         <textarea
-          className='textarea textarea-bordered'
+          className="textarea textarea-bordered"
           defaultValue={
             fetcher.data ? fetcher.data.meme.description : description
           }
-          name='description'
-          data-gramm='false'
-          data-gramm_editor='false'
-          data-enable-grammarly='false'
+          name="description"
+          data-gramm="false"
+          data-gramm_editor="false"
+          data-enable-grammarly="false"
         />
       </div>
 
-      <div className='flex items-center gap-2 mt-6'>
-        <label className='label' htmlFor='isPublic'>
+      <div className="flex items-center gap-2 mt-6">
+        <label className="label" htmlFor="isPublic">
           <span>Make it public: </span>
         </label>
         <input
-          type='checkbox'
+          type="checkbox"
           defaultChecked={isPublic}
-          className='checkbox'
-          name='isPublic'
+          className="checkbox"
+          name="isPublic"
         />
       </div>
 
-      <div className='flex items-center gap-2 mt-6'>
-        <label className='label' htmlFor='isAIDescriptionEnabled'>
+      <div className="flex items-center gap-2 mt-6">
+        <label className="label" htmlFor="isAIDescriptionEnabled">
           <span>Let AI generate desscription: </span>
         </label>
         <input
-          type='checkbox'
+          type="checkbox"
           defaultChecked={false}
-          className='checkbox'
-          name='isAIDescriptionEnabled'
+          className="checkbox"
+          name="isAIDescriptionEnabled"
         />
       </div>
 
-      <div className='form-control mt-6'>
+      <div className="form-control mt-6">
         <button
-          className='btn btn-primary'
-          name='intent'
-          value='update'
-          type='submit'
+          className="btn btn-primary"
+          name="intent"
+          value="update"
+          type="submit"
           disabled={isLoading}
         >
           {isLoading ? "Loading..." : "Update meme"}
@@ -204,12 +208,12 @@ function DeleteMemeForm() {
   const isLoading =
     fetcher.state === "loading" || fetcher.state === "submitting";
   return (
-    <fetcher.Form method='POST'>
+    <fetcher.Form method="POST">
       <button
-        name='intent'
-        value='delete'
+        name="intent"
+        value="delete"
         disabled={isLoading}
-        className='btn btn-error btn-outline'
+        className="btn btn-error btn-outline"
       >
         {isLoading ? "Deleting Meme..." : "Delete Meme"}
       </button>
@@ -222,7 +226,7 @@ export default function MemeByIdPage() {
 
   return (
     <>
-      <div className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>
+      <div className="flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8">
         <CaptionedImage
           url={data?.meme?.url}
           caption={data?.meme?.caption}
@@ -245,7 +249,7 @@ export function ErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     return (
-      <div className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8">
         <h1>
           {error.status} {error.statusText}
         </h1>
@@ -254,7 +258,7 @@ export function ErrorBoundary() {
     );
   } else if (error instanceof Error) {
     return (
-      <div className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8">
         {/*<h1>Error</h1>
         <p>{error.message}</p>*/}
         {/*<p>The stack trace is:</p>
@@ -264,7 +268,7 @@ export function ErrorBoundary() {
     );
   } else {
     return (
-      <h1 className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
+      <h1 className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8">
         Unknown Error
       </h1>
     );

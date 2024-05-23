@@ -74,6 +74,7 @@ export async function action({ request }: ActionArgs): Promise<actionData> {
 
   if (typeof description === "string") {
     const response = await createMeme(memeImagePath, description, request);
+    console.log("response: ", response);
     if (response instanceof Error) {
       return json({ error: response, meme: null, message: null });
     }
@@ -100,56 +101,56 @@ function CreateMemeForm() {
 
   const fetcherData = fetcher.data;
   return (
-    <fetcher.Form className='' method='post' encType='multipart/form-data'>
+    <fetcher.Form className="" method="post" encType="multipart/form-data">
       {fetcherData?.error && (
-        <div className='alert alert-error shadow-lg max-w-sm mx-auto'>
+        <div className="alert alert-error shadow-lg max-w-sm mx-auto">
           <div>
             <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='stroke-current flex-shrink-0 h-6 w-6'
-              fill='none'
-              viewBox='0 0 24 24'
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current flex-shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
             >
               <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-                d='M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z'
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
             <span>{fetcherData.error.message}</span>
           </div>
         </div>
       )}
-      <div className='form-control'>
+      <div className="form-control">
         <label>
-          <p className='font-semibold text-3xl text-left w-full max-w-xs mb-10'>
+          <p className="font-semibold text-3xl text-left w-full max-w-xs mb-10">
             Create Meme
           </p>
         </label>
       </div>
 
-      <div className='form-control'>
-        <label className='label' htmlFor='memeImage'>
-          <span className='label-text'>Upload image</span>
+      <div className="form-control">
+        <label className="label" htmlFor="memeImage">
+          <span className="label-text">Upload image</span>
         </label>
         <input
-          type='file'
-          name='memeImage'
+          type="file"
+          name="memeImage"
           required
-          accept='image/png, image/jpeg'
-          className='file-input w-full max-w-xs'
+          accept="image/png, image/jpeg"
+          className="file-input w-full max-w-xs"
         />
       </div>
 
-      <div className='form-control mt-6'>
-        <label className='label cursor-pointer max-w-xs'>
-          <span className='label-text'>Let AI generate image desciption</span>
+      <div className="form-control mt-6">
+        <label className="label cursor-pointer max-w-xs">
+          <span className="label-text">Let AI generate image desciption</span>
           <input
-            type='checkbox'
+            type="checkbox"
             checked={!showImageDescriptionArea}
             onChange={handleChange}
-            className='checkbox'
+            className="checkbox"
           />
         </label>
       </div>
@@ -157,29 +158,29 @@ function CreateMemeForm() {
       <div
         className={`form-control ${showImageDescriptionArea ? "" : "hidden"}`}
       >
-        <label className='label' htmlFor='description'>
-          <span className='label-text'>Image description</span>
+        <label className="label" htmlFor="description">
+          <span className="label-text">Image description</span>
         </label>
         <textarea
-          className='textarea textarea-bordered max-w-xs'
-          name='description'
-          placeholder='Describe image in less than 100 characters'
+          className="textarea textarea-bordered max-w-xs"
+          name="description"
+          placeholder="Describe image in less than 100 characters"
           maxLength={100}
-          data-gramm='false'
-          data-gramm_editor='false'
-          data-enable-grammarly='false'
+          data-gramm="false"
+          data-gramm_editor="false"
+          data-enable-grammarly="false"
         />
       </div>
 
-      <div className='form-control mt-6'>
+      <div className="form-control mt-6">
         {!data?.isEmailVerified ? (
           <div
-            className='tooltip w-full max-w-xs'
-            data-tip='Please verify your email before creating a meme'
+            className="tooltip w-full max-w-xs"
+            data-tip="Please verify your email before creating a meme"
           >
             <button
-              className='btn w-full max-w-xs btn-outline btn-accent'
-              type='submit'
+              className="btn w-full max-w-xs btn-outline btn-accent"
+              type="submit"
               disabled
             >
               Create Meme
@@ -187,10 +188,10 @@ function CreateMemeForm() {
           </div>
         ) : (
           <button
-            name='infer'
-            value='create-meme'
-            className='btn w-full max-w-xs btn-outline btn-accent'
-            type='submit'
+            name="infer"
+            value="create-meme"
+            className="btn w-full max-w-xs btn-outline btn-accent"
+            type="submit"
             disabled={isLoading}
           >
             {isLoading ? "Loading..." : "Create Meme"}
@@ -212,25 +213,25 @@ function ResendVerificationEmailForm() {
   return (
     <>
       <fetcher.Form
-        encType='multipart/form-data'
+        encType="multipart/form-data"
         className={`flex-shrink-0 bg-base-100 items-center justify-center 
       ${data?.isEmailVerified ? "hidden" : ""}`}
-        method='post'
+        method="post"
       >
         {fetcherData?.message && (
-          <div className='alert alert-success shadow-lg max-w-sm mx-auto'>
+          <div className="alert alert-success shadow-lg max-w-sm mx-auto">
             <div>
               <svg
-                xmlns='http://www.w3.org/2000/svg'
-                className='stroke-current flex-shrink-0 h-6 w-6'
-                fill='none'
-                viewBox='0 0 24 24'
+                xmlns="http://www.w3.org/2000/svg"
+                className="stroke-current flex-shrink-0 h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
               >
                 <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth='2'
-                  d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
               <span>Sent Verification Email, do check your spam</span>
@@ -238,10 +239,10 @@ function ResendVerificationEmailForm() {
           </div>
         )}
         <button
-          type='submit'
-          name='infer'
-          value='resend-verification-email'
-          className='mx-auto  w-full max-w-sm mt-2 underline'
+          type="submit"
+          name="infer"
+          value="resend-verification-email"
+          className="mx-auto  w-full max-w-sm mt-2 underline"
           disabled={isLoading}
         >
           {isLoading ? "Sending Email..." : "Resend verification email"}
@@ -253,7 +254,7 @@ function ResendVerificationEmailForm() {
 
 export default function CreateMemePage() {
   return (
-    <main className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>
+    <main className="flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8">
       <CreateMemeForm />
       <ResendVerificationEmailForm />
     </main>

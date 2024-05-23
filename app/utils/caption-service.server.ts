@@ -17,6 +17,7 @@ export async function getImageCaption(url: string) {
 
     if (response.ok) {
       const data = await response.json();
+      console.log(JSON.stringify(data));
       return data;
     }
 

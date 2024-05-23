@@ -22,6 +22,7 @@ const openai = new OpenAIApi(configuration);
 
 async function getImageDescription(uploadedImageUrl: string) {
   const response = await getImageCaption(uploadedImageUrl);
+  console.log(response);
   return response.captionResult.text;
 }
 
@@ -41,7 +42,7 @@ async function getFunnyImageCaption(description: string) {
 
     return caption;
   } catch (err) {
-    throw new Error("Something went wrong");
+    throw new Error("Error generating caption for your image, try again later");
   }
 }
 
@@ -69,8 +70,9 @@ export async function createMeme(
 ) {
   try {
     const response = await getImageAndUrl(image, userDescription);
+
     if (response instanceof Error) {
-      return new Error("Something Went wrong");
+      return new Error("Error handling image, pls try again later");
     }
     const { uploadedImageUrl, caption, description } = response;
 
@@ -88,7 +90,8 @@ export async function createMeme(
 
     return createdMeme;
   } catch (error) {
-    return new Error("Something Went wrong");
+    if (error instanceof Error) return error;
+    else return new Error("Error creating your meme, pls try again later");
   }
 }
 
