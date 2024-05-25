@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import CloudinaryCaptionedImage from "./CloudinaryCaptionedImage";
 
 export type CaptionedImageProps = {
@@ -8,14 +9,29 @@ export type CaptionedImageProps = {
   caption: string;
   id: string;
   isPublic: boolean;
+  setCaptionedImageUrl: Dispatch<SetStateAction<string>>;
 };
+
+function downloadMeme(url: string, fileName: string): void {
+  fetch(url)
+    .then((response) => response.blob())
+    .then((blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName.endsWith(".png") ? fileName : fileName + ".png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    })
+    .catch((error) => console.error("Error downloading meme:", error));
+}
 
 export default function CaptionedImage(props: CaptionedImageProps) {
   const { url, caption, id, isPublic } = props;
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
-
-  // TODO implement download
-  function downloadMeme() {}
+  const [captionImageUrl, setCaptionedImageUrl] = useState("");
 
   async function copyMemeURL() {
     await navigator.clipboard.writeText(
@@ -30,7 +46,10 @@ export default function CaptionedImage(props: CaptionedImageProps) {
 
   return (
     <>
-      <CloudinaryCaptionedImage {...props} />
+      <CloudinaryCaptionedImage
+        {...props}
+        setCaptionedImageUrl={setCaptionedImageUrl}
+      />
       {shareLinkCopied && (
         <div className="alert alert-info shadow-lg mt-2 max-w-[350px]">
           <div>
@@ -61,7 +80,7 @@ export default function CaptionedImage(props: CaptionedImageProps) {
       <div className="flex gap-8 items-center justify-center mt-2">
         <div className="tooltip cursor-pointer" data-tip="Download Meme">
           <svg
-            onClick={downloadMeme}
+            onClick={() => downloadMeme(captionImageUrl, caption)}
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"

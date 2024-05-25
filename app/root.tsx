@@ -12,7 +12,8 @@ import {
 import Layout from "~/components/Layout";
 import stylesheet from "~/tailwind.css";
 import { commitSession, getSession } from "~/sessions";
-import Alerts from "./components/Alerts";
+import Alert from "./components/Alert";
+import { AlertIntent, Alerts } from "./contants/alerts";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -47,12 +48,12 @@ export async function action({ request }: ActionArgs) {
 
   const intent = formData.get("intent");
 
-  if (intent === "close-success-alert") {
-    session.unset("successAlert");
-  } else if (intent === "close-error-alert") {
-    session.unset("errorAlert");
-  } else if (intent === "close-info-alert") {
-    session.unset("infoAlert");
+  if (intent === AlertIntent.CLOSE_SUCCESS_ALERT) {
+    session.unset(Alerts.SUCCESS);
+  } else if (intent === AlertIntent.CLOSE_ERROR_ALERT) {
+    session.unset(Alerts.ERROR);
+  } else if (intent === AlertIntent.CLOSE_INFO_ALERT) {
+    session.unset(Alerts.INFO);
   }
 
   return json(null, {
@@ -108,7 +109,7 @@ export default function App() {
       </head>
       <body className="no-scrollbar">
         <Layout userId={userId} name={name} isEmailVerified={isEmailVerified} />
-        <Alerts
+        <Alert
           successAlert={successAlert}
           infoAlert={infoAlert}
           errorAlert={errorAlert}

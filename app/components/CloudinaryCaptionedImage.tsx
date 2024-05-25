@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { scale } from "@cloudinary/url-gen/actions/resize";
 import { source } from "@cloudinary/url-gen/actions/overlay";
@@ -15,6 +16,14 @@ const cld = new Cloudinary({
   },
 });
 
+function purifyCaption(str: string) {
+  str = str.replace(/['"]+/g, "");
+  str = str.replace(/[^\w\s]|#/g, "");
+  str = str.trim();
+  str = str.replace(/\s+/g, " ");
+  return str;
+}
+
 function getImageNameFromUrl(url: string) {
   const parts = url.split("/");
   const lastPart = parts[parts.length - 1];
@@ -24,19 +33,24 @@ function getImageNameFromUrl(url: string) {
 }
 
 export default function CloudinaryCaptionedImage(props: CaptionedImageProps) {
-  if (!props.url) return null;
-
-  const img = cld.image(getImageNameFromUrl(props.url));
+  let img = cld.image(getImageNameFromUrl(props.url));
 
   img
     .resize(scale().width(350).height(350))
     .overlay(
       source(
-        text(props.caption, new TextStyle("arial", 24).fontWeight("bold"))
-          .textColor("black")
+        text(
+          purifyCaption(props.caption),
+          new TextStyle("arial", 24).fontWeight("bold")
+        )
+          .textColor("white")
           .textFit(new TextFitQualifier(320))
       ).position(new Position().gravity(compass("south")).offsetY(20))
     );
+
+  useEffect(() => {
+    props.setCaptionedImageUrl(img.toURL());
+  }, []);
 
   return <img src={img.toURL()} alt="Captioned meme" />;
 }

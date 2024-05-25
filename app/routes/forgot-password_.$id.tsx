@@ -12,6 +12,7 @@ import {
   verifyForgotPasswordLink,
   changePassword,
 } from "~/utils/user-services.server";
+import { Alerts } from "~/contants/alerts";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Change Password" }];
@@ -59,7 +60,7 @@ export async function action({ request }: ActionArgs) {
 
   await changePassword(userId, password);
 
-  session.set("successAlert", "Successfully updated password");
+  session.set(Alerts.SUCCESS, "Successfully updated password");
 
   return redirect("/login", {
     headers: {
