@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 import { v2 as cloudinary } from "cloudinary";
 import { requireUserSession, getSession } from "~/sessions";
 import { prismaClient } from "~/utils/prisma-client.server";
@@ -14,11 +14,11 @@ cloudinary.config({
   secure: true,
 });
 
-const configuration = new Configuration({
+const openAIConfig = {
   apiKey: process.env.OPENAI_API_KEY,
-});
+};
 
-const openai = new OpenAIApi(configuration);
+const openai = new OpenAI(openAIConfig);
 
 async function getImageDescription(uploadedImageUrl: string) {
   const response = await getImageCaption(uploadedImageUrl);
@@ -28,17 +28,17 @@ async function getImageDescription(uploadedImageUrl: string) {
 
 async function getFunnyImageCaption(description: string) {
   try {
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: `You are a meme generator, you have been given an image whose description is "${description}", You respond with a funny caption`,
-      temperature: 0.7,
-      max_tokens: 60,
-      top_p: 0.3,
-      frequency_penalty: 0.5,
-      presence_penalty: 0.0,
+    const response = await openai.completions.create({
+      model: "gpt-3.5-turbo-instruct",
+      prompt: `You are a meme generator, you have been given an image whose description is "${description}", You have to respond with a funny caption`,
+      temperature: 1,
+      max_tokens: 256,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
     });
 
-    const caption = response.data.choices[0].text ?? "";
+    const caption = response.choices[0].text;
 
     return caption;
   } catch (err) {
@@ -79,16 +79,20 @@ export async function createMeme(
     const session = await requireUserSession(request);
     const userId = session.get("userId");
 
-    const createdMeme = await prismaClient.meme.create({
-      data: {
-        userId,
-        url: uploadedImageUrl,
-        caption,
-        description,
-      },
-    });
+    try {
+      const createdMeme = await prismaClient.meme.create({
+        data: {
+          userId,
+          url: uploadedImageUrl,
+          caption,
+          description,
+        },
+      });
 
-    return createdMeme;
+      return createdMeme;
+    } catch (error) {
+      return new Error("Error saving your meme, pls try again later");
+    }
   } catch (error) {
     if (error instanceof Error) return error;
     else return new Error("Error creating your meme, pls try again later");
