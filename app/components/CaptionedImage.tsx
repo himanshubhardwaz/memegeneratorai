@@ -10,6 +10,7 @@ export type CaptionedImageProps = {
   id: string;
   isPublic: boolean;
   setCaptionedImageUrl: Dispatch<SetStateAction<string>>;
+  textColor: "white" | "black";
 };
 
 function downloadMeme(url: string, fileName: string): void {
@@ -28,7 +29,9 @@ function downloadMeme(url: string, fileName: string): void {
     .catch((error) => console.error("Error downloading meme:", error));
 }
 
-export default function CaptionedImage(props: CaptionedImageProps) {
+export default function CaptionedImage(
+  props: Omit<CaptionedImageProps, "setCaptionedImageUrl">
+) {
   const { url, caption, id, isPublic } = props;
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
   const [captionImageUrl, setCaptionedImageUrl] = useState("");

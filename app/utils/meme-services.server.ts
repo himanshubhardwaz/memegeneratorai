@@ -1,4 +1,3 @@
-import OpenAI from "openai";
 import { v2 as cloudinary } from "cloudinary";
 import { requireUserSession, getSession } from "~/sessions";
 import { prismaClient } from "~/utils/prisma-client.server";
@@ -14,19 +13,56 @@ cloudinary.config({
   secure: true,
 });
 
-const openAIConfig = {
-  apiKey: process.env.OPENAI_API_KEY,
-};
-
-const openai = new OpenAI(openAIConfig);
-
 async function getImageDescription(uploadedImageUrl: string) {
   const response = await getImageCaption(uploadedImageUrl);
   console.log(response);
   return response.captionResult.text;
 }
 
-async function getFunnyImageCaption(description: string) {
+async function getFunnyImageCaption(description: string): Promise<string> {
+  const url = `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_WORKER_ACCOUNT_ID}/ai/run/@cf/meta/llama-3.1-8b-instruct`;
+  const options = {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.CLOUDFLARE_WORKER_API_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      prompt: `You are a meme generator, you have been given an image whose description is "${description}", You have to respond with a funny caption, and just reply with caption, nothing else. Try to be funny, creative, and descriptive.`,
+    }),
+  };
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    throw new Error("Error generating caption for your image, try again later");
+  }
+
+  const data = (await response.json()) as {
+    success: boolean;
+    result: { response: string };
+    errors: Array<unknown>;
+    messages: Array<unknown>;
+  };
+
+  if (data.success) {
+    return data.result.response;
+  } else {
+    throw new Error(
+      "Error generating caption for your image, try again later: " +
+        data.errors +
+        " - " +
+        data.messages
+    );
+  }
+}
+
+/* 
+DEPRECATED
+import OpenAI from "openai";
+const openAIConfig = {
+  apiKey: process.env.OPENAI_API_KEY,
+};
+const openai = new OpenAI(openAIConfig);
+async function getFunnyImageCaptionWithOpenAI(description: string) {
   try {
     const response = await openai.completions.create({
       model: "gpt-3.5-turbo-instruct",
@@ -45,6 +81,7 @@ async function getFunnyImageCaption(description: string) {
     throw new Error("Error generating caption for your image, try again later");
   }
 }
+*/
 
 export function getCaptionedImageUrl(
   uploadedImageUrl: string,

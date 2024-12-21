@@ -232,12 +232,9 @@ export default function MemeByIdPage() {
           caption={data?.meme?.caption}
           id={data?.meme?.id}
           isPublic={data?.meme?.isPublic}
+          textColor="white"
         />
-        <UpdateMemeForm
-        //isPublic={data.meme.isPublic}
-        //description={data.meme.description}
-        //url={data?.meme?.url}
-        />
+        <UpdateMemeForm />
         <DeleteMemeForm />
       </div>
     </>

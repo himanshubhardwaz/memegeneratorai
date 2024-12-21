@@ -43,7 +43,7 @@ export default function CloudinaryCaptionedImage(props: CaptionedImageProps) {
           purifyCaption(props.caption),
           new TextStyle("arial", 24).fontWeight("bold")
         )
-          .textColor("white")
+          .textColor(props.textColor)
           .textFit(new TextFitQualifier(320))
       ).position(new Position().gravity(compass("south")).offsetY(20))
     );

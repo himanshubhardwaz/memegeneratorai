@@ -29,12 +29,13 @@ export async function loader({ request, params }: LoaderArgs) {
 export default function MemeByIdPage() {
   const data = useLoaderData<typeof loader>() || {};
   return (
-    <div className='flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8'>
+    <div className="flex min-h-[calc(100vh-8rem)] flex-col items-center justify-center p-8 gap-8">
       <CaptionedImage
         url={data?.meme?.url}
         caption={data?.meme?.caption}
         id={data?.meme?.id}
         isPublic={data?.meme?.isPublic}
+        textColor="white"
       />
     </div>
   );
@@ -45,7 +46,7 @@ export function ErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     return (
-      <div className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8">
         <h1>
           {error.status} {error.statusText}
         </h1>
@@ -54,7 +55,7 @@ export function ErrorBoundary() {
     );
   } else if (error instanceof Error) {
     return (
-      <div className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8">
         Loading...
         {/*<h1>Error</h1>
         <p>{error.message}</p>
@@ -64,7 +65,7 @@ export function ErrorBoundary() {
     );
   } else {
     return (
-      <h1 className='flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8'>
+      <h1 className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center p-8 gap-8">
         Unknown Error
       </h1>
     );
